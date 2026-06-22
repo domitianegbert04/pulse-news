@@ -20,403 +20,360 @@
   --separator: rgba(60,60,67,0.12);
   --blue: #007AFF;
   --blue-light: #EBF4FF;
-  --green: #34C759;
-  --orange: #FF9500;
+  --radius-card: 20px;
+  --radius-btn: 14px;
+  --radius-pill: 100px;
+  --shadow-card: 0 2px 12px rgba(0,0,0,0.07), 0 1px 3px rgba(0,0,0,0.05);
+  --shadow-raised: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background-color: var(--bg);
+  font-family: var(--font);
+  background: var(--bg);
   color: var(--label);
-  line-height: 1.4;
-  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
 }
 
-.app-header {
+.nav {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(255,255,255,0.8);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 0.5px solid var(--separator);
-  padding: 12px 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  background: rgba(242,242,247,0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid var(--separator);
+  padding: 0 16px;
 }
 
-.brand {
+.nav-inner {
+  max-width: 680px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+}
+
+.nav-logo {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
-.logo-dot {
-  width: 10px;
-  height: 10px;
-  background-color: var(--blue);
+.nav-logo .dot {
+  width: 8px; height: 8px;
+  background: var(--blue);
   border-radius: 50%;
-  box-shadow: 0 0 8px var(--blue);
+  animation: breathe 3s ease-in-out infinite;
 }
 
-.brand h1 {
-  font-size: 20px;
-  font-weight: 700;
-  letter-spacing: -0.5px;
+@keyframes breathe {
+  0%,100% { transform: scale(1); opacity:1; }
+  50% { transform: scale(1.4); opacity:0.6; }
 }
 
 .refresh-btn {
-  background: none;
+  width: 34px; height: 34px;
+  border-radius: 50%;
   border: none;
-  cursor: pointer;
-  padding: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: var(--surface);
   color: var(--blue);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.2s;
 }
+.refresh-btn.spinning { animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
 
-.refresh-btn svg {
-  width: 22px;
-  height: 22px;
-  transition: transform 0.4s ease;
-}
-
-.refresh-btn.spinning svg {
-  transform: rotate(360deg);
-}
-
-.chips-container {
-  position: sticky;
-  top: 49px;
-  z-index: 90;
-  background: rgba(242,242,247,0.8);
+.chips-wrap {
+  background: rgba(242,242,247,0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  padding: 10px 16px;
+  position: sticky;
+  top: 57px;
+  z-index: 99;
+  border-bottom: 1px solid var(--separator);
+}
+
+.chips {
+  max-width: 680px;
+  margin: 0 auto;
   display: flex;
   gap: 8px;
+  padding: 10px 16px;
   overflow-x: auto;
   scrollbar-width: none;
 }
-.chips-container::-webkit-scrollbar { display: none; }
+.chips::-webkit-scrollbar { display: none; }
 
 .chip {
-  background: var(--surface3);
-  color: var(--label2);
+  flex-shrink: 0;
   padding: 6px 14px;
-  border-radius: 16px;
+  border-radius: var(--radius-pill);
+  border: none;
   font-size: 13px;
   font-weight: 500;
-  white-space: nowrap;
   cursor: pointer;
-  transition: all 0.2s ease;
-  border: none;
+  background: var(--surface);
+  color: var(--label2);
+  box-shadow: var(--shadow-card);
 }
+
 .chip.active {
-  background: var(--blue);
-  color: #fff;
+  background: var(--label);
+  color: white;
+  box-shadow: none;
 }
 
 .feed {
-  padding: 16px;
-  max-width: 600px;
+  max-width: 680px;
   margin: 0 auto;
+  padding: 16px 16px 40px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
 }
 
 .card {
   background: var(--surface);
-  border-radius: 12px;
-  padding: 16px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  animation: cardIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
 }
 
-.card-meta {
+@keyframes cardIn {
+  from { opacity:0; transform: translateY(16px) scale(0.97); }
+  to   { opacity:1; transform: translateY(0) scale(1); }
+}
+
+.card-top { padding: 16px 16px 12px; }
+.card-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+
+.card-tag {
   font-size: 11px;
-  text-transform: uppercase;
   font-weight: 600;
-  color: var(--blue);
-  margin-bottom: 6px;
-  letter-spacing: 0.5px;
-}
-
-.card h2 {
-  font-size: 17px;
-  font-weight: 600;
-  line-height: 1.3;
-  margin-bottom: 8px;
-  letter-spacing: -0.2px;
-}
-
-.card-summary {
-  font-size: 14px;
-  color: var(--label2);
-  margin-bottom: 12px;
-}
-
-.card-source {
-  font-size: 12px;
-  color: var(--label3);
-  margin-bottom: 16px;
-}
-
-.q-box {
-  background: var(--blue-light);
-  border-radius: 10px;
-  padding: 12px;
-  margin-bottom: 16px;
-}
-
-.q-header {
-  font-size: 11px;
   text-transform: uppercase;
-  font-weight: 700;
-  color: var(--blue);
-  margin-bottom: 4px;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
 }
 
-.q-text {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--label2);
-}
+.tag-tech { background: #EBF4FF; color: #007AFF; }
+.tag-science { background: #F0F0FF; color: #5856D6; }
+.tag-world { background: #FFF0EB; color: #FF6B35; }
+.tag-business { background: #F0FFF4; color: #34C759; }
 
-.thread {
-  border-top: 0.5px solid var(--separator);
-  padding-top: 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
+.card-time { font-size: 12px; color: var(--label3); }
+.card-title { font-size: 17px; font-weight: 700; line-height: 1.3; margin-bottom: 8px; }
+.card-body { font-size: 14px; line-height: 1.6; color: var(--label2); }
+.card-source { display: flex; align-items: center; gap: 6px; margin-top: 12px; font-size: 12px; color: var(--label3); }
+.source-dot { width: 5px; height: 5px; background: var(--label3); border-radius: 50%; }
 
-.bubble {
-  max-width: 85%;
-  padding: 10px 14px;
-  border-radius: 16px;
-  font-size: 14px;
-  animation: pop 0.25s ease-out;
+.card-question-wrap {
+  margin: 0 16px 12px;
+  padding: 14px;
+  background: var(--bg);
+  border-radius: 14px;
 }
-@keyframes pop { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.card-question-label { font-size: 11px; font-weight: 600; color: var(--label3); text-transform: uppercase; margin-bottom: 6px; }
+.card-question-text { font-size: 14px; font-weight: 500; color: var(--label); }
+.card-divider { height: 1px; background: var(--separator); margin: 0 16px 14px; }
+.comment-section { padding: 0 16px 16px; }
 
-.bubble.user {
-  background: var(--surface3);
-  color: var(--label);
-  align-self: flex-end;
-  border-bottom-right-radius: 4px;
-}
-
-.bubble.ai {
-  background: var(--blue);
-  color: #FFFFFF;
-  align-self: flex-start;
-  border-bottom-left-radius: 4px;
-}
-
-.comment-input-zone {
-  margin-top: 14px;
-  border-top: 0.5px solid var(--separator);
-  padding-top: 12px;
-}
-
-.input-row {
-  display: flex;
-  gap: 8px;
-}
-
+.comment-input-wrap { display: flex; flex-direction: column; gap: 10px; }
 .comment-input {
-  flex: 1;
-  background: var(--surface2);
-  border: none;
-  border-radius: 18px;
-  padding: 8px 14px;
-  font-size: 14px;
-  color: var(--label);
-  outline: none;
+  width: 100%; padding: 12px 14px; border-radius: 14px; border: 1.5px solid var(--separator);
+  background: var(--bg); font-size: 14px; color: var(--label); resize: none; outline: none; min-height: 80px;
+}
+.comment-input:focus { border-color: var(--blue); background: white; }
+
+.comment-send {
+  align-self: flex-end; padding: 10px 20px; background: var(--blue); color: white;
+  border: none; border-radius: var(--radius-btn); font-size: 14px; font-weight: 600; cursor: pointer;
 }
 
-.send-btn {
-  background: var(--blue);
-  color: #fff;
-  border: none;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-.send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.thread { display: flex; flex-direction: column; gap: 10px; }
+.bubble { display: flex; gap: 10px; align-items: flex-start; }
+.bubble.user { flex-direction: row-reverse; }
+.bubble-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
+.bubble.user .bubble-avatar { background: var(--blue); color: white; }
+.bubble.ai .bubble-avatar { background: linear-gradient(135deg, #5856D6, #AF52DE); color: white; }
+.bubble-content { max-width: calc(100% - 48px); }
+.bubble-name { font-size: 11px; font-weight: 600; color: var(--label3); margin-bottom: 4px; }
+.bubble.user .bubble-name { text-align: right; }
+.bubble-text { padding: 10px 13px; border-radius: 16px; font-size: 14px; line-height: 1.55; }
+.bubble.user .bubble-text { background: var(--blue); color: white; border-bottom-right-radius: 4px; }
+.bubble.ai .bubble-text { background: var(--bg); color: var(--label); border-bottom-left-radius: 4px; }
+.bubble-time { font-size: 10px; color: var(--label3); margin-top: 4px; }
+.bubble.user .bubble-time { text-align: right; }
 
-#load-trigger {
-  text-align: center;
-  padding: 20px;
-  font-size: 13px;
-  color: var(--label3);
-}
+.thinking-dots { display: flex; gap: 4px; align-items: center; padding: 4px 2px; }
+.thinking-dots span { width: 6px; height: 6px; background: var(--label3); border-radius: 50%; animation: tdot 1.2s infinite; }
+.thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
+.thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes tdot { 0%,80%,100% { transform: scale(0.6); opacity:0.4; } 40% { transform: scale(1); opacity:1; } }
 
-.shimmer {
-  background: linear-gradient(90deg, #eff1f3 4%, #e2e6e9 25%, #eff1f3 36%);
-  background-size: 200% 100%;
-  animation: loading-shimmer 1.5s infinite linear;
-}
-@keyframes loading-shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+.load-trigger { height: 60px; display: flex; align-items: center; justify-content: center; color: var(--label3); font-size: 13px; }
+.load-spinner { width: 28px; height: 28px; border: 2.5px solid var(--separator); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.8s linear infinite; display: none; }
+.load-spinner.visible { display: block; }
 </style>
 </head>
 <body>
 
-<header class="app-header">
-  <div class="brand">
-    <div class="logo-dot"></div>
-    <h1>Pulse</h1>
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo"><span class="dot"></span>Pulse</div>
+    <button class="refresh-btn" id="refresh-btn" onclick="refreshFeed()">↻</button>
   </div>
-  <button class="refresh-btn" id="refresh-btn" onclick="freshFeed()" aria-label="Refresh Feed">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
-  </button>
-</header>
-
-<nav class="chips-container" id="chips">
-  <button class="chip active" data-topic="all">All Pulse</button>
-  <button class="chip" data-topic="tech">Tech</button>
-  <button class="chip" data-topic="science">Science</button>
-  <button class="chip" data-topic="finance">Finance</button>
 </nav>
 
-<main class="feed" id="feed"></main>
+<div class="chips-wrap">
+  <div class="chips" id="chips">
+    <button class="chip active" data-topic="all">All</button>
+    <button class="chip" data-topic="Tech">Tech</button>
+    <button class="chip" data-topic="Science">Science</button>
+    <button class="chip" data-topic="World">World</button>
+    <button class="chip" data-topic="Business">Business</button>
+  </div>
+</div>
 
-<div id="load-trigger">Gathering more perspectives...</div>
+<div class="feed" id="feed"></div>
+<div class="load-trigger" id="load-trigger">
+  <div class="load-spinner" id="load-spinner"></div>
+</div>
 
 <script>
-// ── CONFIGURATION & LOCAL STORAGE KEYWORDS ──────────────────────────────────
-const ARTICLES_KEY = 'pulse_articles_store';
-const ARTICLES_DATE_KEY = 'pulse_articles_timestamp';
-const CACHE_DURATION = 30 * 60 * 1000; // 30 mins
-
 let allArticles = [];
 let displayedCount = 0;
-let activeFilter = 'all';
 let isLoading = false;
+let activeFilter = 'all';
+const PAGE_SIZE = 5;
 
-// Local matching dictionary instead of API loops on page load
-const KEYWORD_QUESTIONS = [
-  { keywords: ['ai', 'intelligence', 'llm', 'model', 'claude', 'gpt'], question: "Will local fine-tuning replace massive centralized models, or will data monopolies win?" },
-  { keywords: ['space', 'mars', 'rocket', 'nasa', 'orbit'], question: "Does private space infrastructure speed up true exploration, or just billionaire commercialism?" },
-  { keywords: ['crypto', 'bitcoin', 'ethereum', 'defi', 'blockchain'], question: "Can decentralized protocols survive incoming regulatory frameworks?" },
-  { keywords: ['climate', 'carbon', 'energy', 'solar', 'green'], question: "Are carbon credits fixing the core environmental issue, or just buying time for corporations?" },
-  { keywords: ['health', 'fda', 'medical', 'drug', 'crispr'], question: "When genetic therapies become normal, how do we keep healthcare access fair?" },
-  { keywords: ['economy', 'fed', 'inflation', 'stocks', 'market'], question: "Is programmatic monetary control better than human central banking panels?" }
-];
+const STORAGE_KEY = 'pulse_comments_v3';
 
-const BACKUP_QUESTIONS = [
-  "What secondary infrastructure implications will this shift cause over the coming decade?",
-  "Who stands to lose the most power or revenue if this implementation scales globally?",
-  "Is this progress fixing a foundational structural flaw, or wrapping a band-aid on a symptom?"
-];
-
-// Helper to locally match keywords and produce an instantaneous critical question
-function generateLocalQuestion(title, summary) {
-  const combined = `${title} ${summary}`.toLowerCase();
-  for (const item of KEYWORD_QUESTIONS) {
-    if (item.keywords.some(kw => combined.includes(kw))) {
-      return item.question;
-    }
-  }
-  return BACKUP_QUESTIONS[Math.floor(Math.random() * BACKUP_QUESTIONS.length)];
+function getStorage() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch { return {}; }
 }
 
-// ── SECURE SERVERLESS / LOCAL AI RESPONSE STRATEGY ──────────────────────────
-async function getAIResponse(articleContext, userComment) {
-  // CONFIGURATION: Set to 'true' if you set up a custom CORS proxy endpoint
-  const USE_PRODUCTION_GATEWAY = false; 
-  const PROXY_URL = 'https://your-vercel-or-netlify-proxy.vercel.app/api/pulse-chat';
-
-  if (USE_PRODUCTION_GATEWAY) {
-    try {
-      const response = await fetch(PROXY_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-3-5-sonnet-20241022', // Clean fixed valid model target
-          article: articleContext,
-          comment: userComment
-        })
-      });
-      if (!response.ok) throw new Error('Gateway Error');
-      const data = await response.json();
-      return data.reply;
-    } catch (err) {
-      console.error("Gateway failed, dropping into intelligent browser backup simulation:", err);
-    }
-  }
-
-  // Pure Safe Browser Simulation Engine for smooth GitHub Pages deployment
-  await new Promise(resolve => setTimeout(resolve, 1200));
-  
-  const ideas = [
-    `That highlights a critical issue. If we track historical deployment timelines for this, the bottleneck isn't the technical feasibility—it's organizational inertia. Regulatory bodies are built to lag, while this architecture moves exponentially.`,
-    `An excellent perspective. The underlying asset values here aren't clear-cut. When these frameworks scale, the downstream structural cost drops, meaning the primary monetization layer will likely shift completely somewhere unexpected.`,
-    `That is the exact macro friction point. The immediate optimization metrics look spectacular on paper, but the systemic risk increases because of systemic centralization. A structural backup strategy needs to happen early.`
-  ];
-  return ideas[Math.floor(Math.random() * ideas.length)];
+function saveComment(articleId, userText, aiText) {
+  const store = getStorage();
+  store[articleId] = { user: userText, ai: aiText, time: new Date().toISOString() };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
 }
 
-// ── ARTIFICIAL DATA GENERATION (MOCK RSS HARVESTER) ──────────────────────────
-function generateMockFeed() {
-  const topics = ['tech', 'science', 'finance'];
-  const companies = ['Aether Labs', 'Apex Capital', 'Helix Bio', 'Core Systems', 'Vertex Group', 'Strata Corp'];
-  const contexts = [
-    { topic: 'tech', t: "Unveils Edge-Native Architecture", s: "A breakthrough running fully local neural intelligence arrays directly inside small embedded hardware units without datacenter latency." },
-    { topic: 'tech', t: "Open-Source Protocols Match Proprietary Metrics", s: "A community-maintained foundational language model breaks developer records, proving open network iteration can keep pace with hyper-funded private labs." },
-    { topic: 'science', t: "Achieves Stable Room-Temperature Magnetic Coupling", s: "Material engineers have verified a brand-new crystalline compound configuration that holds strong coherent flux states under standard ambient environments." },
-    { topic: 'science', t: "Synthesizes Target Enzyme for Synthetic Carbon Breakdown", s: "Bioreactor trials successfully scaled an engineering variant capable of metabolizing high-density composite polymers within 72 hours." },
-    { topic: 'finance', t: "Algorithmic Settlement Framework Liquidates Legacy Bond Block", s: "Automated clearing logic processed a multi-billion infrastructure asset transfer without reliance on traditional clearinghouse verifications." },
-    { topic: 'finance', t: "Cross-Border Liquidity Rails Shift to Isolated Ledgers", s: "Three sovereign banking networks finalized standard operational guidelines to route primary international transfers via independent crypto-secured nodes." }
+function generateLocalMockFeed() {
+  const categories = ['Tech', 'Science', 'World', 'Business'];
+  const dataPool = [
+    { topic: 'Tech', title: "Neural Mesh Architecture Eliminates Data Center Latency", body: "Engineers finalized an edge-intelligence framework capable of hosting full foundational arrays directly within lightweight phone processing units." },
+    { topic: 'Science', title: "Ambient Superconductivity Validated in Crystalline Synthetics", body: "Research teams confirmed uniform magnetic flux pinning patterns within processed chemical compounds running at standard indoor ambient temperatures." },
+    { topic: 'World', title: "Global Logistics Corridors Pivot Toward Isolated Ledgers", body: "International cargo transport lanes completed standard baseline testing transitions to route primary tracking data over decentralized nodes." },
+    { topic: 'Business', title: "Sovereign Framework Restructures Automated Market Makers", body: "Financial authorities approved continuous system guidelines to settle asset transfers without reliance on central clearings." }
   ];
 
-  let output = [];
-  const now = Date.now();
-  
-  for (let i = 0; i < 30; i++) {
-    const ctx = contexts[i % contexts.length];
-    const targetCompany = companies[Math.floor(Math.random() * companies.length)];
-    const itemTitle = `${targetCompany} ${ctx.t}`;
-    
-    output.push({
-      id: `art-${now}-${i}`,
-      topic: ctx.topic,
-      title: itemTitle,
-      summary: ctx.s,
-      source: `${targetCompany} Engineering Communiqué • ${i + 1}h ago`,
-      question: generateLocalQuestion(itemTitle, ctx.s)
+  let list = [];
+  for (let i = 0; i < 20; i++) {
+    const baseline = dataPool[i % dataPool.length];
+    const itemID = `art-${Date.now()}-${i}`;
+    list.push({
+      id: itemID,
+      topic: baseline.topic,
+      title: `${baseline.title} [v${i+1}]`,
+      body: baseline.body,
+      source: "Pulse Intelligence Desk",
+      publishedAt: new Date().toISOString(),
+      question: "How do you think this structural shift impacts operations in your immediate professional workspace?"
     });
   }
-  return output;
+  return list;
 }
 
-// ── PIPELINE OPERATIONS ──────────────────────────────────────────────────────
-async function initialLoad() {
-  if (isLoading) return;
-  isLoading = true;
+async function getAIResponse(article, userComment) {
+  // Pure local client-side processing engine to completely bypass CORS blockages on GitHub Pages
+  await new Promise(res => setTimeout(res, 1200));
+  
+  const strategicReplies = [
+    `That directly hits the central issue. If we look closely at deployment parameters, the true bottleneck isn't standard engineering restrictions—it is organizational friction. Infrastructure panels are systemically slow, while this framework moves exponentially.`,
+    `An excellent framework point. When these technical paradigms reach scale, the downstream execution cost falls to near zero, meaning historical monetization systems will likely have to adapt completely.`,
+    `That is the exact micro friction layer. While localized optimization numbers look spectacular on paper, systemic risks rise because underlying network dependencies remain unhedged.`
+  ];
+  return strategicReplies[Math.floor(Math.random() * strategicReplies.length)];
+}
 
-  const cachedData = localStorage.getItem(ARTICLES_KEY);
-  const cachedTime = localStorage.getItem(ARTICLES_DATE_KEY);
-  const now = Date.now();
+function renderCard(article, index) {
+  const existing = getStorage()[article.id];
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.id = `card-${article.id}`;
 
-  if (cachedData && cachedTime && (now - cachedTime < CACHE_DURATION)) {
-    allArticles = JSON.parse(cachedData);
-  } else {
-    allArticles = generateMockFeed();
-    localStorage.setItem(ARTICLES_KEY, JSON.stringify(allArticles));
-    localStorage.setItem(ARTICLES_DATE_KEY, now.toString());
-  }
+  const commentHTML = existing 
+    ? buildThreadHTML(existing.user, existing.ai, existing.time)
+    : buildInputHTML(article.id);
 
-  isLoading = false;
-  displayNextPage();
+  card.innerHTML = `
+    <div class="card-top">
+      <div class="card-meta">
+        <span class="card-tag tag-${article.topic.toLowerCase()}">⚡ ${article.topic}</span>
+        <span class="card-time">Just now</span>
+      </div>
+      <div class="card-title">${article.title}</div>
+      <div class="card-body">${article.body}</div>
+      <div class="card-source"><span class="source-dot"></span><span>${article.source}</span></div>
+    </div>
+    <div class="card-question-wrap">
+      <div class="card-question-label">Ask yourself</div>
+      <div class="card-question-text">${article.question}</div>
+    </div>
+    <div class="card-divider"></div>
+    <div class="comment-section" id="cs-${article.id}">${commentHTML}</div>
+  `;
+  return card;
+}
+
+function buildInputHTML(id) {
+  return `<div class="comment-input-wrap">
+    <textarea class="comment-input" id="ta-${id}" placeholder="Share your thoughts..." rows="3"></textarea>
+    <button class="comment-send" onclick="submitComment('${id}')">Send ↑</button>
+  </div>`;
+}
+
+function buildThreadHTML(userText, aiText, time) {
+  return `<div class="thread">
+    <div class="bubble user">
+      <div class="bubble-avatar">YOU</div>
+      <div class="bubble-content">
+        <div class="bubble-text">${userText}</div>
+      </div>
+    </div>
+    <div class="bubble ai">
+      <div class="bubble-avatar">AI</div>
+      <div class="bubble-content">
+        <div class="bubble-text">${aiText}</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+async function submitComment(id) {
+  const ta = document.getElementById(`ta-${id}`);
+  const cs = document.getElementById(`cs-${id}`);
+  const text = ta ? ta.value.trim() : '';
+  if (!text) return;
+
+  cs.innerHTML = `<div class="thread">
+    <div class="bubble user"><div class="bubble-avatar">YOU</div><div class="bubble-content"><div class="bubble-text">${text}</div></div></div>
+    <div class="bubble ai"><div class="bubble-avatar">AI</div><div class="bubble-content"><div class="bubble-text"><div class="thinking-dots"><span></span><span></span><span></span></div></div></div></div>
+  </div>`;
+
+  const article = allArticles.find(a => a.id === id);
+  const reply = await getAIResponse(article, text);
+  saveComment(id, text, reply);
+  cs.innerHTML = buildThreadHTML(text, reply, new Date().toISOString());
 }
 
 function filteredArticles() {
@@ -425,159 +382,57 @@ function filteredArticles() {
 }
 
 function displayNextPage() {
-  const visible = filteredArticles();
-  const feedElement = document.getElementById('feed');
-  const targetBatch = 5;
-  const start = displayedCount;
-  const end = Math.min(start + targetBatch, visible.length);
-
-  if (start >= visible.length) return;
-
-  for (let i = start; i < end; i++) {
-    const article = visible[i];
-    const card = document.createElement('article');
-    card.className = 'card';
-    card.id = `card-${article.id}`;
-    card.innerHTML = `
-      <div class="card-meta">${article.topic}</div>
-      <h2>${article.title}</h2>
-      <p class="card-summary">${article.summary}</p>
-      <div class="card-source">${article.source}</div>
-      <div class="q-box">
-        <div class="q-header">Pulse Core Question</div>
-        <div class="q-text">${article.question}</div>
-      </div>
-      <div class="thread" id="thread-${article.id}"></div>
-      <div class="comment-input-zone">
-        <div class="input-row">
-          <input type="text" class="comment-input" id="input-${article.id}" placeholder="Provide your perspective..." onkeydown="handleInputKey(event, '${article.id}')">
-          <button class="send-btn" id="btn-${article.id}" onclick="submitComment('${article.id}')" aria-label="Send perspective">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-          </button>
-        </div>
-      </div>
-    `;
-    feedElement.appendChild(card);
-  }
-  displayedCount = end;
+  const articles = filteredArticles();
+  const slice = articles.slice(displayedCount, displayedCount + PAGE_SIZE);
+  const feed = document.getElementById('feed');
+  slice.forEach((art, i) => feed.appendChild(renderCard(art, i)));
+  displayedCount += slice.length;
 }
 
 function loadMore() {
   if (isLoading) return;
   isLoading = true;
+  document.getElementById('load-spinner').classList.add('visible');
   setTimeout(() => {
-    isLoading = false;
     displayNextPage();
-  }, 400);
+    document.getElementById('load-spinner').classList.remove('visible');
+    isLoading = false;
+  }, 500);
 }
 
-function handleInputKey(e, id) {
-  if (e.key === 'Enter') {
-    submitComment(id);
-  }
+function initialLoad() {
+  allArticles = generateLocalMockFeed();
+  displayNextPage();
 }
 
-async function submitComment(id) {
-  const inputEl = document.getElementById(`input-${id}`);
-  const btnEl = document.getElementById(`btn-${id}`);
-  const threadEl = document.getElementById(`thread-${id}`);
-  const text = inputEl.value.trim();
-
-  if (!text) return;
-
-  // UI update: Freeze input controls to prevent double submissions
-  inputEl.value = '';
-  inputEl.disabled = true;
-  btnEl.disabled = true;
-
-  // Add user message bubble
-  const userBubble = document.createElement('div');
-  userBubble.className = 'bubble user';
-  userBubble.textContent = text;
-  threadEl.appendChild(userBubble);
-
-  // Add active loading indicator
-  const aiLoadingBubble = document.createElement('div');
-  aiLoadingBubble.className = 'bubble ai shimmer';
-  aiLoadingBubble.style.width = '60px';
-  aiLoadingBubble.style.height = '34px';
-  threadEl.appendChild(aiLoadingBubble);
-  
-  // Keep scrolling smooth
-  aiLoadingBubble.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-
-  // Gather context details from matched object
-  const matchObj = allArticles.find(a => a.id === id) || { title: '', summary: '' };
-  const contextText = `Context: ${matchObj.title}. Detail: ${matchObj.summary}`;
-
-  const aiReply = await getAIResponse(contextText, text);
-
-  // Remove loading state and show real content response
-  aiLoadingBubble.remove();
-  const aiBubble = document.createElement('div');
-  aiBubble.className = 'bubble ai';
-  aiBubble.textContent = aiReply;
-  threadEl.appendChild(aiBubble);
-  
-  // Reactivate input
-  inputEl.disabled = false;
-  btnEl.disabled = false;
-  inputEl.focus();
-  aiBubble.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-}
-
-function freshFeed() {
-  allArticles = [];
+function refreshFeed() {
+  document.getElementById('refresh-btn').classList.add('spinning');
+  document.getElementById('feed').innerHTML = '';
   displayedCount = 0;
-  localStorage.removeItem(ARTICLES_KEY);
-  localStorage.removeItem(ARTICLES_DATE_KEY);
-  
-  const refreshBtn = document.getElementById('refresh-btn');
-  refreshBtn.classList.add('spinning');
-  
-  const feedElement = document.getElementById('feed');
-  feedElement.innerHTML = '';
-  
-  initialLoad().then(() => {
-    refreshBtn.classList.remove('spinning');
-  });
+  setTimeout(() => {
+    initialLoad();
+    document.getElementById('refresh-btn').classList.remove('spinning');
+  }, 600);
 }
 
-// ── FILTER CHIPS CONTROLLER ──────────────────────────────────────────────────
 document.getElementById('chips').addEventListener('click', e => {
   const chip = e.target.closest('.chip');
   if (!chip) return;
-  
   document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
   chip.classList.add('active');
-  
   activeFilter = chip.dataset.topic;
   displayedCount = 0;
   document.getElementById('feed').innerHTML = '';
-
-  const visible = filteredArticles();
-  if (visible.length > 0) {
-    displayNextPage();
-  } else {
-    loadMore();
-  }
+  displayNextPage();
 });
 
-// ── INFINITE SCROLL OBSERVER ──────────────────────────────────────────────────
 const observer = new IntersectionObserver(entries => {
-  if (entries[0].isIntersecting && !isLoading) {
-    const visible = filteredArticles();
-    if (displayedCount < visible.length) {
-      displayNextPage();
-    } else {
-      loadMore();
-    }
+  if (entries[0].isIntersecting && !isLoading && displayedCount < filteredArticles().length) {
+    loadMore();
   }
-}, { rootMargin: '250px' });
-
+}, { rootMargin: '150px' });
 observer.observe(document.getElementById('load-trigger'));
 
-// Initialize App
 initialLoad();
 </script>
 </body>
