@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Pulse — AI News</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #F2F2F7;
+  --surface: #FFFFFF;
+  --surface2: #F2F2F7;
+  --surface3: #E5E5EA;
+  --label: #000000;
+  --label2: #3C3C43;
+  --label3: #8E8E93;
+  --separator: rgba(60,60,67,0.12);
+  --blue: #007AFF;
+  --blue-light: #EBF4FF;
+  --green: #34C759;
+  --orange: #FF9500;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--bg);
+  color: var(--label);
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+}
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255,255,255,0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 0.5px solid var(--separator);
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.logo-dot {
+  width: 10px;
+  height: 10px;
+  background-color: var(--blue);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--blue);
+}
+
+.brand h1 {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.refresh-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--blue);
+}
+
+.refresh-btn svg {
+  width: 22px;
+  height: 22px;
+  transition: transform 0.4s ease;
+}
+
+.refresh-btn.spinning svg {
+  transform: rotate(360deg);
+}
+
+.chips-container {
+  position: sticky;
+  top: 49px;
+  z-index: 90;
+  background: rgba(242,242,247,0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 10px 16px;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.chips-container::-webkit-scrollbar { display: none; }
+
+.chip {
+  background: var(--surface3);
+  color: var(--label2);
+  padding: 6px 14px;
+  border-radius: 16px;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+.chip.active {
+  background: var(--blue);
+  color: #fff;
+}
+
+.feed {
+  padding: 16px;
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card {
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.card-meta {
+  font-size: 11px;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--blue);
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+
+.card h2 {
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.3;
+  margin-bottom: 8px;
+  letter-spacing: -0.2px;
+}
+
+.card-summary {
+  font-size: 14px;
+  color: var(--label2);
+  margin-bottom: 12px;
+}
+
+.card-source {
+  font-size: 12px;
+  color: var(--label3);
+  margin-bottom: 16px;
+}
+
+.q-box {
+  background: var(--blue-light);
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 16px;
+}
+
+.q-header {
+  font-size: 11px;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--blue);
+  margin-bottom: 4px;
+}
+
+.q-text {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--label2);
+}
+
+.thread {
+  border-top: 0.5px solid var(--separator);
+  padding-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bubble {
+  max-width: 85%;
+  padding: 10px 14px;
+  border-radius: 16px;
+  font-size: 14px;
+  animation: pop 0.25s ease-out;
+}
+@keyframes pop { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+.bubble.user {
+  background: var(--surface3);
+  color: var(--label);
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+
+.bubble.ai {
+  background: var(--blue);
+  color: #FFFFFF;
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+
+.comment-input-zone {
+  margin-top: 14px;
+  border-top: 0.5px solid var(--separator);
+  padding-top: 12px;
+}
+
+.input-row {
+  display: flex;
+  gap: 8px;
+}
+
+.comment-input {
+  flex: 1;
+  background: var(--surface2);
+  border: none;
+  border-radius: 18px;
+  padding: 8px 14px;
+  font-size: 14px;
+  color: var(--label);
+  outline: none;
+}
+
+.send-btn {
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+#load-trigger {
+  text-align: center;
+  padding: 20px;
+  font-size: 13px;
+  color: var(--label3);
+}
+
+.shimmer {
+  background: linear-gradient(90deg, #eff1f3 4%, #e2e6e9 25%, #eff1f3 36%);
+  background-size: 200% 100%;
+  animation: loading-shimmer 1.5s infinite linear;
+}
+@keyframes loading-shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="brand">
+    <div class="logo-dot"></div>
+    <h1>Pulse</h1>
+  </div>
+  <button class="refresh-btn" id="refresh-btn" onclick="freshFeed()" aria-label="Refresh Feed">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+  </button>
+</header>
+
+<nav class="chips-container" id="chips">
+  <button class="chip active" data-topic="all">All Pulse</button>
+  <button class="chip" data-topic="tech">Tech</button>
+  <button class="chip" data-topic="science">Science</button>
+  <button class="chip" data-topic="finance">Finance</button>
+</nav>
+
+<main class="feed" id="feed"></main>
+
+<div id="load-trigger">Gathering more perspectives...</div>
+
+<script>
+// ── CONFIGURATION & LOCAL STORAGE KEYWORDS ──────────────────────────────────
+const ARTICLES_KEY = 'pulse_articles_store';
+const ARTICLES_DATE_KEY = 'pulse_articles_timestamp';
+const CACHE_DURATION = 30 * 60 * 1000; // 30 mins
+
+let allArticles = [];
+let displayedCount = 0;
+let activeFilter = 'all';
+let isLoading = false;
+
+// Local matching dictionary instead of API loops on page load
+const KEYWORD_QUESTIONS = [
+  { keywords: ['ai', 'intelligence', 'llm', 'model', 'claude', 'gpt'], question: "Will local fine-tuning replace massive centralized models, or will data monopolies win?" },
+  { keywords: ['space', 'mars', 'rocket', 'nasa', 'orbit'], question: "Does private space infrastructure speed up true exploration, or just billionaire commercialism?" },
+  { keywords: ['crypto', 'bitcoin', 'ethereum', 'defi', 'blockchain'], question: "Can decentralized protocols survive incoming regulatory frameworks?" },
+  { keywords: ['climate', 'carbon', 'energy', 'solar', 'green'], question: "Are carbon credits fixing the core environmental issue, or just buying time for corporations?" },
+  { keywords: ['health', 'fda', 'medical', 'drug', 'crispr'], question: "When genetic therapies become normal, how do we keep healthcare access fair?" },
+  { keywords: ['economy', 'fed', 'inflation', 'stocks', 'market'], question: "Is programmatic monetary control better than human central banking panels?" }
+];
+
+const BACKUP_QUESTIONS = [
+  "What secondary infrastructure implications will this shift cause over the coming decade?",
+  "Who stands to lose the most power or revenue if this implementation scales globally?",
+  "Is this progress fixing a foundational structural flaw, or wrapping a band-aid on a symptom?"
+];
+
+// Helper to locally match keywords and produce an instantaneous critical question
+function generateLocalQuestion(title, summary) {
+  const combined = `${title} ${summary}`.toLowerCase();
+  for (const item of KEYWORD_QUESTIONS) {
+    if (item.keywords.some(kw => combined.includes(kw))) {
+      return item.question;
+    }
+  }
+  return BACKUP_QUESTIONS[Math.floor(Math.random() * BACKUP_QUESTIONS.length)];
+}
+
+// ── SECURE SERVERLESS / LOCAL AI RESPONSE STRATEGY ──────────────────────────
+async function getAIResponse(articleContext, userComment) {
+  // CONFIGURATION: Set to 'true' if you set up a custom CORS proxy endpoint
+  const USE_PRODUCTION_GATEWAY = false; 
+  const PROXY_URL = 'https://your-vercel-or-netlify-proxy.vercel.app/api/pulse-chat';
+
+  if (USE_PRODUCTION_GATEWAY) {
+    try {
+      const response = await fetch(PROXY_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-3-5-sonnet-20241022', // Clean fixed valid model target
+          article: articleContext,
+          comment: userComment
+        })
+      });
+      if (!response.ok) throw new Error('Gateway Error');
+      const data = await response.json();
+      return data.reply;
+    } catch (err) {
+      console.error("Gateway failed, dropping into intelligent browser backup simulation:", err);
+    }
+  }
+
+  // Pure Safe Browser Simulation Engine for smooth GitHub Pages deployment
+  await new Promise(resolve => setTimeout(resolve, 1200));
+  
+  const ideas = [
+    `That highlights a critical issue. If we track historical deployment timelines for this, the bottleneck isn't the technical feasibility—it's organizational inertia. Regulatory bodies are built to lag, while this architecture moves exponentially.`,
+    `An excellent perspective. The underlying asset values here aren't clear-cut. When these frameworks scale, the downstream structural cost drops, meaning the primary monetization layer will likely shift completely somewhere unexpected.`,
+    `That is the exact macro friction point. The immediate optimization metrics look spectacular on paper, but the systemic risk increases because of systemic centralization. A structural backup strategy needs to happen early.`
+  ];
+  return ideas[Math.floor(Math.random() * ideas.length)];
+}
+
+// ── ARTIFICIAL DATA GENERATION (MOCK RSS HARVESTER) ──────────────────────────
+function generateMockFeed() {
+  const topics = ['tech', 'science', 'finance'];
+  const companies = ['Aether Labs', 'Apex Capital', 'Helix Bio', 'Core Systems', 'Vertex Group', 'Strata Corp'];
+  const contexts = [
+    { topic: 'tech', t: "Unveils Edge-Native Architecture", s: "A breakthrough running fully local neural intelligence arrays directly inside small embedded hardware units without datacenter latency." },
+    { topic: 'tech', t: "Open-Source Protocols Match Proprietary Metrics", s: "A community-maintained foundational language model breaks developer records, proving open network iteration can keep pace with hyper-funded private labs." },
+    { topic: 'science', t: "Achieves Stable Room-Temperature Magnetic Coupling", s: "Material engineers have verified a brand-new crystalline compound configuration that holds strong coherent flux states under standard ambient environments." },
+    { topic: 'science', t: "Synthesizes Target Enzyme for Synthetic Carbon Breakdown", s: "Bioreactor trials successfully scaled an engineering variant capable of metabolizing high-density composite polymers within 72 hours." },
+    { topic: 'finance', t: "Algorithmic Settlement Framework Liquidates Legacy Bond Block", s: "Automated clearing logic processed a multi-billion infrastructure asset transfer without reliance on traditional clearinghouse verifications." },
+    { topic: 'finance', t: "Cross-Border Liquidity Rails Shift to Isolated Ledgers", s: "Three sovereign banking networks finalized standard operational guidelines to route primary international transfers via independent crypto-secured nodes." }
+  ];
+
+  let output = [];
+  const now = Date.now();
+  
+  for (let i = 0; i < 30; i++) {
+    const ctx = contexts[i % contexts.length];
+    const targetCompany = companies[Math.floor(Math.random() * companies.length)];
+    const itemTitle = `${targetCompany} ${ctx.t}`;
+    
+    output.push({
+      id: `art-${now}-${i}`,
+      topic: ctx.topic,
+      title: itemTitle,
+      summary: ctx.s,
+      source: `${targetCompany} Engineering Communiqué • ${i + 1}h ago`,
+      question: generateLocalQuestion(itemTitle, ctx.s)
+    });
+  }
+  return output;
+}
+
+// ── PIPELINE OPERATIONS ──────────────────────────────────────────────────────
+async function initialLoad() {
+  if (isLoading) return;
+  isLoading = true;
+
+  const cachedData = localStorage.getItem(ARTICLES_KEY);
+  const cachedTime = localStorage.getItem(ARTICLES_DATE_KEY);
+  const now = Date.now();
+
+  if (cachedData && cachedTime && (now - cachedTime < CACHE_DURATION)) {
+    allArticles = JSON.parse(cachedData);
+  } else {
+    allArticles = generateMockFeed();
+    localStorage.setItem(ARTICLES_KEY, JSON.stringify(allArticles));
+    localStorage.setItem(ARTICLES_DATE_KEY, now.toString());
+  }
+
+  isLoading = false;
+  displayNextPage();
+}
+
+function filteredArticles() {
+  if (activeFilter === 'all') return allArticles;
+  return allArticles.filter(a => a.topic === activeFilter);
+}
+
+function displayNextPage() {
+  const visible = filteredArticles();
+  const feedElement = document.getElementById('feed');
+  const targetBatch = 5;
+  const start = displayedCount;
+  const end = Math.min(start + targetBatch, visible.length);
+
+  if (start >= visible.length) return;
+
+  for (let i = start; i < end; i++) {
+    const article = visible[i];
+    const card = document.createElement('article');
+    card.className = 'card';
+    card.id = `card-${article.id}`;
+    card.innerHTML = `
+      <div class="card-meta">${article.topic}</div>
+      <h2>${article.title}</h2>
+      <p class="card-summary">${article.summary}</p>
+      <div class="card-source">${article.source}</div>
+      <div class="q-box">
+        <div class="q-header">Pulse Core Question</div>
+        <div class="q-text">${article.question}</div>
+      </div>
+      <div class="thread" id="thread-${article.id}"></div>
+      <div class="comment-input-zone">
+        <div class="input-row">
+          <input type="text" class="comment-input" id="input-${article.id}" placeholder="Provide your perspective..." onkeydown="handleInputKey(event, '${article.id}')">
+          <button class="send-btn" id="btn-${article.id}" onclick="submitComment('${article.id}')" aria-label="Send perspective">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+      </div>
+    `;
+    feedElement.appendChild(card);
+  }
+  displayedCount = end;
+}
+
+function loadMore() {
+  if (isLoading) return;
+  isLoading = true;
+  setTimeout(() => {
+    isLoading = false;
+    displayNextPage();
+  }, 400);
+}
+
+function handleInputKey(e, id) {
+  if (e.key === 'Enter') {
+    submitComment(id);
+  }
+}
+
+async function submitComment(id) {
+  const inputEl = document.getElementById(`input-${id}`);
+  const btnEl = document.getElementById(`btn-${id}`);
+  const threadEl = document.getElementById(`thread-${id}`);
+  const text = inputEl.value.trim();
+
+  if (!text) return;
+
+  // UI update: Freeze input controls to prevent double submissions
+  inputEl.value = '';
+  inputEl.disabled = true;
+  btnEl.disabled = true;
+
+  // Add user message bubble
+  const userBubble = document.createElement('div');
+  userBubble.className = 'bubble user';
+  userBubble.textContent = text;
+  threadEl.appendChild(userBubble);
+
+  // Add active loading indicator
+  const aiLoadingBubble = document.createElement('div');
+  aiLoadingBubble.className = 'bubble ai shimmer';
+  aiLoadingBubble.style.width = '60px';
+  aiLoadingBubble.style.height = '34px';
+  threadEl.appendChild(aiLoadingBubble);
+  
+  // Keep scrolling smooth
+  aiLoadingBubble.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+  // Gather context details from matched object
+  const matchObj = allArticles.find(a => a.id === id) || { title: '', summary: '' };
+  const contextText = `Context: ${matchObj.title}. Detail: ${matchObj.summary}`;
+
+  const aiReply = await getAIResponse(contextText, text);
+
+  // Remove loading state and show real content response
+  aiLoadingBubble.remove();
+  const aiBubble = document.createElement('div');
+  aiBubble.className = 'bubble ai';
+  aiBubble.textContent = aiReply;
+  threadEl.appendChild(aiBubble);
+  
+  // Reactivate input
+  inputEl.disabled = false;
+  btnEl.disabled = false;
+  inputEl.focus();
+  aiBubble.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function freshFeed() {
+  allArticles = [];
+  displayedCount = 0;
+  localStorage.removeItem(ARTICLES_KEY);
+  localStorage.removeItem(ARTICLES_DATE_KEY);
+  
+  const refreshBtn = document.getElementById('refresh-btn');
+  refreshBtn.classList.add('spinning');
+  
+  const feedElement = document.getElementById('feed');
+  feedElement.innerHTML = '';
+  
+  initialLoad().then(() => {
+    refreshBtn.classList.remove('spinning');
+  });
+}
+
+// ── FILTER CHIPS CONTROLLER ──────────────────────────────────────────────────
+document.getElementById('chips').addEventListener('click', e => {
+  const chip = e.target.closest('.chip');
+  if (!chip) return;
+  
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  chip.classList.add('active');
+  
+  activeFilter = chip.dataset.topic;
+  displayedCount = 0;
+  document.getElementById('feed').innerHTML = '';
+
+  const visible = filteredArticles();
+  if (visible.length > 0) {
+    displayNextPage();
+  } else {
+    loadMore();
+  }
+});
+
+// ── INFINITE SCROLL OBSERVER ──────────────────────────────────────────────────
+const observer = new IntersectionObserver(entries => {
+  if (entries[0].isIntersecting && !isLoading) {
+    const visible = filteredArticles();
+    if (displayedCount < visible.length) {
+      displayNextPage();
+    } else {
+      loadMore();
+    }
+  }
+}, { rootMargin: '250px' });
+
+observer.observe(document.getElementById('load-trigger'));
+
+// Initialize App
+initialLoad();
+</script>
+</body>
+</html>
