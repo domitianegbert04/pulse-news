@@ -954,22 +954,64 @@ function generateQuestion(title, description) {
   return 'What does this story reveal about where the world is heading?';
 }
 
+// CORS proxies — free-tier news APIs only allow direct browser calls from
+// localhost during dev; production domains (like GitHub Pages) get blocked.
+// These proxies add the missing CORS headers. Tried in order, first success wins.
+const CORS_PROXIES = [
+  (url) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+  (url) => `https://corsproxy.io/?url=${encodeURIComponent(url)}`,
+  (url) => `https://api.codetabs.com/v1/proxy/?quest=${encodeURIComponent(url)}`,
+];
+
+async function fetchWithCorsFallback(targetUrl) {
+  let lastError = null;
+
+  // Try direct first (works if the API ever does allow the origin)
+  try {
+    const res = await fetch(targetUrl);
+    if (res.ok) return res;
+    lastError = new Error(`Direct HTTP ${res.status}`);
+  } catch (e) {
+    lastError = e;
+  }
+
+  // Fall through proxies
+  for (const buildProxyUrl of CORS_PROXIES) {
+    try {
+      const res = await fetch(buildProxyUrl(targetUrl));
+      if (res.ok) return res;
+      lastError = new Error(`Proxy HTTP ${res.status}`);
+    } catch (e) {
+      lastError = e;
+    }
+  }
+
+  throw lastError || new Error('All fetch attempts failed');
+}
+
 async function fetchNews(topics, existingIds = []) {
   const topic = topics[Math.floor(Math.random() * topics.length)];
   const category = TOPIC_CATEGORY[topic] || 'world';
   const url = `https://newsdata.io/api/1/latest?apikey=${NEWSDATA_KEY}&language=en&category=${category}&size=10`;
 
   let res;
-  try { res = await fetch(url); }
-  catch (e) { throw new Error('Network error: ' + e.message); }
+  try {
+    res = await fetchWithCorsFallback(url);
+  } catch (e) {
+    throw new Error('CORS_OR_NETWORK_BLOCK: ' + e.message);
+  }
 
-  if (!res.ok) { const txt = await res.text(); throw new Error(`NewsData ${res.status}: ${txt}`); }
+  if (!res.ok) {
+    let txt = '';
+    try { txt = await res.text(); } catch {}
+    throw new Error(`NEWSDATA_HTTP_${res.status}: ${txt}`);
+  }
 
   const data = await res.json();
-  if (data.status !== 'success') throw new Error('NewsData: ' + JSON.stringify(data));
+  if (data.status !== 'success') throw new Error('NEWSDATA_API_ERROR: ' + JSON.stringify(data));
 
   const raw = (data.results || []).filter(a => a.title && a.description && a.description.length > 40);
-  if (raw.length === 0) throw new Error('No articles returned');
+  if (raw.length === 0) throw new Error('NO_ARTICLES: NewsData returned zero usable articles');
 
   const batch = raw.slice(0, 6);
   return batch.map(a => ({
@@ -1477,11 +1519,23 @@ async function initialLoad() {
     allArticles = await fetchNews(topics, []);
   } catch (err) {
     clearSkeletons();
+    const reason = err.message || 'Unknown error';
+    let humanHint = 'Check your connection and try again.';
+    if (reason.startsWith('CORS_OR_NETWORK_BLOCK')) {
+      humanHint = 'The news source likely blocks direct requests from this app (CORS), or your device has no connection right now.';
+    } else if (reason.includes('NEWSDATA_HTTP_401') || reason.includes('NEWSDATA_HTTP_403')) {
+      humanHint = 'The news API key was rejected (invalid, expired, or out of free credits).';
+    } else if (reason.includes('NEWSDATA_HTTP_429')) {
+      humanHint = 'Daily free-tier limit reached on the news source. Try again tomorrow.';
+    } else if (reason.startsWith('NO_ARTICLES')) {
+      humanHint = 'The news source responded but had nothing usable right now.';
+    }
     feed.innerHTML = `
       <div class="state-card">
         <div class="state-icon">📡</div>
         <div class="state-title">Couldn't fetch today's news</div>
-        <div class="state-body">Check your connection and try again.</div>
+        <div class="state-body">${humanHint}</div>
+        <div style="margin-top:10px;font-size:11px;color:var(--label3);word-break:break-word;font-family:monospace;">${escHtml(reason.slice(0, 200))}</div>
         <button class="state-btn" onclick="refreshFeed()">Try again</button>
       </div>`;
     isLoading = false;
