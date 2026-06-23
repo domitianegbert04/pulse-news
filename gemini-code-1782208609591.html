@@ -33,6 +33,13 @@
       --nav-blur-bg: rgba(242,242,247,0.85);
     }
 
+    /* Critical LCP fix */
+  .compression-toggle {
+    display: flex;
+    visibility: visible;
+    min-height: 44px; /* Prevents layout shift */
+
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     
     html { -webkit-font-smoothing: antialiased; }
