@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Pulse — News You Actually Think About</title>
+  
+  <!-- Performance: Preconnect to font domains -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #F2F2F7;
+      --surface: #FFFFFF;
+      --surface-raised: #FFFFFF;
+      --bg-inset: #F2F2F7;
+      --label: #000000;
+      --label2: #3C3C43;
+      --label3: #8E8E93;
+      --separator: rgba(60,60,67,0.12);
+      --blue: #007AFF;
+      --indigo: #5856D6;
+      --purple: #AF52DE;
+      --orange: #FF9500;
+      --radius-card: 20px;
+      --radius-btn: 14px;
+      --radius-pill: 100px;
+      --shadow-card: 0 2px 12px rgba(0,0,0,0.07);
+      --shadow-raised: 0 8px 32px rgba(0,0,0,0.12);
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --nav-blur-bg: rgba(242,242,247,0.85);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    html { -webkit-font-smoothing: antialiased; }
+    
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--label);
+      min-height: 100vh;
+    }
+
+    /* Layout: Wider desktop view */
+    .nav-inner, .chips, .compression-bar, .feed, .compression-panel {
+      max-width: 900px;
+      width: 95%;
+      margin: 0 auto;
+    }
+
+    /* Critical LCP fix */
+    .compression-toggle {
+      display: flex;
+      visibility: visible;
+      min-height: 44px;
+      width: 100%;
+      padding: 10px 14px;
+      background: linear-gradient(135deg, var(--indigo), var(--purple));
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-family: var(--font);
+      font-weight: 600;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .nav { position: sticky; top: 0; z-index: 100; background: var(--nav-blur-bg); backdrop-filter: blur(20px); border-bottom: 1px solid var(--separator); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 56px; padding: 0 16px; }
+    
+    .feed { display: flex; flex-direction: column; gap: 14px; padding: 16px; }
+    .card { background: var(--surface); border-radius: var(--radius-card); padding: 16px; box-shadow: var(--shadow-card); }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo">Pulse</div>
+    <div class="nav-right">
+      <button class="icon-btn" onclick="toggleSound()">🔇</button>
+      <button class="theme-toggle" onclick="toggleTheme()">☀️</button>
+    </div>
+  </div>
+</nav>
+
+<div class="chips-wrap">
+  <div class="compression-bar">
+    <button class="compression-toggle" onclick="toggleCompression()">⚡ 60-Second Mode</button>
+  </div>
+</div>
+
+<div class="feed" id="feed">
+  <!-- Content injected by JS -->
+</div>
+
+<script>
+  // Placeholder logic for functionality
+  function toggleTheme() {
+    const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+  }
+  
+  function toggleCompression() {
+    console.log("60-Second Mode toggled");
+  }
+  
+  function toggleSound() {
+    console.log("Sound toggled");
+  }
+</script>
+
+</body>
+</html>
