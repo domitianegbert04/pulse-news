@@ -1025,25 +1025,32 @@ function generateHighFidelityMockFeed() {
 }
 
 // ── HEALING CORS FALLBACK LOOP ────────────────────────────────────────────────
+/**
+ * Fetches news using direct API calls with a proxy fallback chain.
+ * Returns only real data from NewsData.io.
+ * If all network attempts fail, it throws an error that your initialLoad 
+ * function will catch to display the "honest error" screen.
+ */
 async function fetchWithCorsFallback(targetUrl) {
   const attempts = [];
-  
-  // Try direct fetch first
+
+  // 1. Try Direct Fetch (Standard)
   try {
     const res = await fetch(targetUrl);
     if (res.ok) return await res.json();
     attempts.push(`direct=HTTP_${res.status}`);
   } catch (e) {
-    attempts.push(`direct=${e.message || 'Failed to fetch'}`);
+    attempts.push(`direct=${e.message}`);
   }
 
-  // Iterate over proxy chain
+  // 2. Try Proxy Fallback Chain (Only if Direct fails)
   for (const proxy of CORS_PROXIES) {
     try {
       const proxiedUrl = proxy.build(targetUrl);
       const res = await fetch(proxiedUrl);
+      
       if (res.ok) {
-        // Special case unpacker for raw content wrapping if using raw proxy configurations
+        // Handle specific proxy return formats
         if (proxy.name === 'allorigins') {
           const raw = await res.json();
           return JSON.parse(raw.contents);
@@ -1052,14 +1059,59 @@ async function fetchWithCorsFallback(targetUrl) {
       }
       attempts.push(`${proxy.name}=HTTP_${res.status}`);
     } catch (e) {
-      attempts.push(`${proxy.name}=${e.message || 'Failed to fetch'}`);
+      attempts.push(`${proxy.name}=${e.message}`);
     }
   }
 
-  // CRITICAL ACTION: If everything fails (Network Blocked/CORS Intercepted), trigger the local fallback engine
-  console.warn("Pulse Network Alert: Remote connection failed. Fallback payload generated. Diagnostic context: " + attempts.join(' | '));
-  return generateHighFidelityMockFeed();
+  // 3. Final Fallback: If we reach here, nothing worked.
+  // We throw an error instead of returning fake data, so the 
+  // UI triggers the "Couldn't reach news" state correctly.
+  throw new Error(`NEWSDATA_HTTP_Failed: ${attempts.join(' | ')}`);
 }
+/**
+ * Fetches news using direct API calls with a proxy fallback chain.
+ * Returns only real data from NewsData.io.
+ * If all network attempts fail, it throws an error that your initialLoad 
+ * function will catch to display the "honest error" screen.
+ */
+async function fetchWithCorsFallback(targetUrl) {
+  const attempts = [];
+
+  // 1. Try Direct Fetch (Standard)
+  try {
+    const res = await fetch(targetUrl);
+    if (res.ok) return await res.json();
+    attempts.push(`direct=HTTP_${res.status}`);
+  } catch (e) {
+    attempts.push(`direct=${e.message}`);
+  }
+
+  // 2. Try Proxy Fallback Chain (Only if Direct fails)
+  for (const proxy of CORS_PROXIES) {
+    try {
+      const proxiedUrl = proxy.build(targetUrl);
+      const res = await fetch(proxiedUrl);
+      
+      if (res.ok) {
+        // Handle specific proxy return formats
+        if (proxy.name === 'allorigins') {
+          const raw = await res.json();
+          return JSON.parse(raw.contents);
+        }
+        return await res.json();
+      }
+      attempts.push(`${proxy.name}=HTTP_${res.status}`);
+    } catch (e) {
+      attempts.push(`${proxy.name}=${e.message}`);
+    }
+  }
+
+  // 3. Final Fallback: If we reach here, nothing worked.
+  // We throw an error instead of returning fake data, so the 
+  // UI triggers the "Couldn't reach news" state correctly.
+  throw new Error(`NEWSDATA_HTTP_Failed: ${attempts.join(' | ')}`);
+}
+
 
 
 async function fetchNews(topics, existingIds = []) {
