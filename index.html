@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Pulse — News You Actually Think About</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400&display=swap" rel="stylesheet">
-<style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
@@ -557,6 +557,12 @@ html[data-theme="dark"] .tag-climate  { background: #0F2A1A; color: #5FE085; }
   .card-title { font-size: 16px; }
   .feed { padding: 12px 12px 40px; gap: 12px; }
   .dna-panel { width: calc(100vw - 36px); right: 18px; }
+}
+  /* Critical LCP fix */
+.compression-toggle {
+  display: flex;
+  visibility: visible;
+  min-height: 44px; /* Prevents layout shift */
 }
 </style>
 </head>
