@@ -1016,7 +1016,9 @@ function generateHighFidelityMockFeed() {
       pubDate: new Date(Date.now() - (i * 3600000)).toISOString(),
       link: "#",
       image_url: null,
-      category: [TOPIC_CATEGORY[base.topic] || 'top']
+      // Replace the old category line with this:
+      category: [typeof TOPIC_CATEGORY !== 'undefined' ? TOPIC_CATEGORY[base.topic] : base.topic.toLowerCase()]
+
     });
   }
   return { results: list };
