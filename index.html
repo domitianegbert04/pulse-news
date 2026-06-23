@@ -83,7 +83,8 @@ body {
 }
 
 .nav-inner {
-  max-width: 680px;
+  max-width: 900px;
+  width: 95%;
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -168,7 +169,8 @@ html[data-theme="light"] .theme-toggle .icon-moon { transform: translateY(-30px)
 }
 
 .chips {
-  max-width: 680px;
+  max-width: 900px;
+  width: 95%;
   margin: 0 auto;
   display: flex;
   gap: 8px;
@@ -197,7 +199,8 @@ html[data-theme="light"] .theme-toggle .icon-moon { transform: translateY(-30px)
 
 /* ── COMPRESSION MODE BAR ── */
 .compression-bar {
-  max-width: 680px;
+  max-width: 900px;
+  width: 95%;
   margin: 0 auto;
   padding: 0 16px;
 }
@@ -229,7 +232,8 @@ html[data-theme="light"] .theme-toggle .icon-moon { transform: translateY(-30px)
   padding: 18px;
   margin: 10px auto 0;
   box-shadow: var(--shadow-card);
-  max-width: 680px;
+  max-width: 900px;
+  width: 95%;
   font-size: 14px;
   line-height: 1.7;
   color: var(--label2);
@@ -248,7 +252,8 @@ html[data-theme="light"] .theme-toggle .icon-moon { transform: translateY(-30px)
 
 /* ── FEED ── */
 .feed {
-  max-width: 680px;
+  max-width: 900px;
+  width: 95%;
   margin: 0 auto;
   padding: 16px 16px 40px;
   display: flex;
@@ -487,7 +492,7 @@ html[data-theme="dark"] .fossil-banner { background: #2A220A; color: #E0B040; }
 .state-icon { font-size: 44px; margin-bottom: 12px; }
 .state-title { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
 .state-body { font-size: 14px; color: var(--label3); line-height: 1.5; }
-.state-btn { margin-top: 16px; padding: 10px 24px; background: var(--blue); color: white; border: none; border-radius: var(--radius-btn); font-family: var(--font); font-size: 14px; font-weight: 600; cursor: pointer; }
+.state-btn { margin-top: 16px; padding: 10px 24px; background: var(--blue); color: white; border: none; border-radius: var(--radius-btn); font-family: var(--font); font-size: 14px; font-weight: 600; c[...]
 
 /* ── TAG COLORS (light) ── */
 .tag-tech     { background: #EBF4FF; color: #007AFF; }
@@ -628,12 +633,12 @@ html[data-theme="dark"] .tag-climate  { background: #0F2A1A; color: #5FE085; }
 </div>
 
 <script>
-// ════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════[...]
 // PULSE — News You Actually Think About
 // All config, state, and feature logic
-// ════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════[...]
 
-// ── CONFIG ────────────────────────────────────────────────────────────────────
+// ── CONFIG ─────────────────────────────────────────────────────────────[...]
 // NewsData.io — free tier, 200 credits/day, CORS-friendly. Get your own key at newsdata.io
 const NEWSDATA_KEY = 'pub_87199f9f7c204d5faec86ed2bed0cd2c3c73';
 
@@ -647,7 +652,7 @@ const TAG_ICON = {
   Health: '❤️', Space: '🚀', Climate: '🌿'
 };
 
-// ── STATE ──────────────────────────────────────────────────────────────────────
+// ── STATE ───────────────────────────────────────────────────────────────[...]
 let allArticles = [];
 let displayedCount = 0;
 let isLoading = false;
@@ -662,9 +667,9 @@ const ARTICLES_CACHE_KEY = 'pulse_articles_cache_v1';
 const ARTICLES_CACHE_TIME_KEY = 'pulse_articles_cache_time_v1';
 const CACHE_MAX_AGE_MS = 6 * 60 * 60 * 1000; // 6 hours — beyond this, cached news is too stale to call "current"
 
-// ════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════[...]
 // FEATURE 1: THEME TOGGLE (light/dark)
-// ════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════[...]
 function initTheme() {
   const saved = localStorage.getItem(THEME_KEY);
   const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -679,9 +684,9 @@ function toggleTheme() {
   localStorage.setItem(THEME_KEY, next);
 }
 
-// ════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════[...]
 // FEATURE 2: AMBIENT SOUND PER TOPIC (Web Audio API, no libraries)
-// ════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════[...]
 let audioCtx = null;
 let currentOscillators = [];
 let soundEnabled = false;
@@ -730,9 +735,9 @@ function playAmbientForTopic(topic) {
   currentOscillators.push(osc);
 }
 
-// ════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════[...]
 // FEATURE 3: READING DNA — local fingerprint of engagement, no login
-// ════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════[...]
 function getReadingDna() {
   try { return JSON.parse(localStorage.getItem(READING_DNA_KEY) || '{}'); }
   catch { return {}; }
@@ -798,9 +803,9 @@ function toggleDnaPanel() {
   panel.classList.toggle('visible');
 }
 
-// ════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════[...]
 // FEATURE 4: BIAS MIRROR — silent stance tracking, weekly reveal
-// ════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════[...]
 const BIAS_KEY = 'pulse_bias_log_v1';
 
 function classifyStance(userComment) {
@@ -866,9 +871,9 @@ function renderBiasMirrorBanner() {
   feed.prepend(banner);
 }
 
-// ════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════[...]
 // FEATURE 5: COMMENT FOSSILS — AI revisits old takes after 30 days
-// ════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════[...]
 function checkFossil(commentEntry) {
   if (!commentEntry || !commentEntry.time) return false;
   const ageMs = Date.now() - new Date(commentEntry.time).getTime();
@@ -876,9 +881,9 @@ function checkFossil(commentEntry) {
   return days >= 30 && !commentEntry.fossilShown;
 }
 
-// ════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════[...]
 // FEATURE 6: CONFIDENCE DECAY — visual staleness overlay
-// ════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════[...]
 function applyDecayOverlay(el, publishedAt) {
   if (!publishedAt) return;
   const ageHours = (Date.now() - new Date(publishedAt).getTime()) / 3600000;
@@ -889,9 +894,9 @@ function applyDecayOverlay(el, publishedAt) {
   el.style.filter = `saturate(${1 - decayPct * 0.4})`;
 }
 
-// ════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════[...]
 // FEATURE 7: READING PACE METRIC — track scroll/dwell, mark skim vs read
-// ════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════[...]
 const cardViewTimers = {};
 
 function startPaceTracking(cardEl, articleId) {
@@ -919,9 +924,9 @@ function markReadStatus(cardEl, dwellMs) {
   }
 }
 
-// ════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════[...]
 // COMMENT STORAGE
-// ════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════[...]
 function getCommentStore() {
   try { return JSON.parse(localStorage.getItem(COMMENTS_KEY) || '{}'); }
   catch { return {}; }
@@ -945,9 +950,9 @@ function markFossilShown(articleId) {
   }
 }
 
-// ════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════[...]
 // NEWS FETCHING
-// ════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════[...]
 function classifyTopic(title, desc) {
   const text = (title + ' ' + (desc || '')).toLowerCase();
   if (/space|nasa|spacex|rocket|satellite|asteroid|mars|moon|orbit/.test(text)) return 'Space';
@@ -998,766 +1003,3 @@ const CORS_PROXIES = [
   { name: 'codetabs',  build: (url) => `https://api.codetabs.com/v1/proxy/?quest=${encodeURIComponent(url)}` },
   { name: 'allorigins',build: (url) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}` },
 ];
-
-// ── ROBUST LOCAL RECOVERY POOL (Network Fallback Engine) ──────────────────────
-function generateHighFidelityMockFeed() {
-  const dataPool = [
-    { topic: 'Tech', title: "Neural Mesh Architecture Eliminates Edge Processing Latency", description: "Engineers finalized a decentralized execution framework capable of hosting core foundational models directly inside mobile processing units." },
-    { topic: 'Science', title: "Ambient Superconductivity Validated in Crystalline Synthetics", description: "Independent research labs confirmed uniform magnetic flux pinning patterns within processed chemical compounds running at standard indoor temperatures." },
-    { topic: 'World', title: "Global Logistics Corridors Pivot Toward Isolated Ledgers", description: "International shipping channels successfully completed operational baseline testing transitions to route cross-border documentation over zero-trust nodes." },
-    { topic: 'Business', title: "Sovereign Financial Framework Restructures Automated Liquidity Providers", description: "Regulators approved continuous system settlement guidelines to reconcile cross-border corporate asset transfers without traditional clearing houses." },
-    { topic: 'Climate', title: "Atmospheric Carbon Capture Rates Double via Bio-Synthesized Matrices", description: "Biotech plants scaled a microbial substrate variant that traps industrial ambient emissions at a fraction of standard thermodynamic overhead." },
-    { topic: 'Space', title: "Lunar Subsurface Aquifers Confirmed for In-Situ Fuel Production", description: "Deep-radar mapping arrays located high-density subterranean ice deposits near the South Pole basin, securing early runway metrics for crewed transit hubs." },
-    { topic: 'Health', title: "Targeted Messenger Strand Therapeutics Reverse Cellular Degeneration", description: "Clinical results verified selective sequence replacement paradigms repairing damaged genetic material directly within systemic neural layers." }
-  ];
-
-  let list = [];
-  // Build a synthetic feed array matching your live schema structure
-  for (let i = 0; i < 20; i++) {
-    const base = dataPool[i % dataPool.length];
-    list.push({
-      source_name: "Pulse Intelligence Network",
-      title: `${base.title}`,
-      description: base.description,
-      pubDate: new Date(Date.now() - (i * 3600000)).toISOString(),
-      link: "#",
-      image_url: null,
-      // Replace the old category line with this:
-      category: [typeof TOPIC_CATEGORY !== 'undefined' ? TOPIC_CATEGORY[base.topic] : base.topic.toLowerCase()]
-
-    });
-  }
-  return { results: list };
-}
-
-// ── HEALING CORS FALLBACK LOOP ────────────────────────────────────────────────
-/**
- * Fetches news using direct API calls with a proxy fallback chain.
- * Returns only real data from NewsData.io.
- * If all network attempts fail, it throws an error that your initialLoad 
- * function will catch to display the "honest error" screen.
- */
-async function fetchWithCorsFallback(targetUrl) {
-  const attempts = [];
-
-  // 1. Try Direct Fetch (Standard)
-  try {
-    const res = await fetch(targetUrl);
-    if (res.ok) return await res.json();
-    attempts.push(`direct=HTTP_${res.status}`);
-  } catch (e) {
-    attempts.push(`direct=${e.message}`);
-  }
-
-  // 2. Try Proxy Fallback Chain (Only if Direct fails)
-  for (const proxy of CORS_PROXIES) {
-    try {
-      const proxiedUrl = proxy.build(targetUrl);
-      const res = await fetch(proxiedUrl);
-      
-      if (res.ok) {
-        // Handle specific proxy return formats
-        if (proxy.name === 'allorigins') {
-          const raw = await res.json();
-          return JSON.parse(raw.contents);
-        }
-        return await res.json();
-      }
-      attempts.push(`${proxy.name}=HTTP_${res.status}`);
-    } catch (e) {
-      attempts.push(`${proxy.name}=${e.message}`);
-    }
-  }
-
-  // 3. Final Fallback: If we reach here, nothing worked.
-  // We throw an error instead of returning fake data, so the 
-  // UI triggers the "Couldn't reach news" state correctly.
-  throw new Error(`NEWSDATA_HTTP_Failed: ${attempts.join(' | ')}`);
-}
-/**
- * Fetches news using direct API calls with a proxy fallback chain.
- * Returns only real data from NewsData.io.
- * If all network attempts fail, it throws an error that your initialLoad 
- * function will catch to display the "honest error" screen.
- */
-async function fetchWithCorsFallback(targetUrl) {
-  const attempts = [];
-
-  // 1. Try Direct Fetch (Standard)
-  try {
-    const res = await fetch(targetUrl);
-    if (res.ok) return await res.json();
-    attempts.push(`direct=HTTP_${res.status}`);
-  } catch (e) {
-    attempts.push(`direct=${e.message}`);
-  }
-
-  // 2. Try Proxy Fallback Chain (Only if Direct fails)
-  for (const proxy of CORS_PROXIES) {
-    try {
-      const proxiedUrl = proxy.build(targetUrl);
-      const res = await fetch(proxiedUrl);
-      
-      if (res.ok) {
-        // Handle specific proxy return formats
-        if (proxy.name === 'allorigins') {
-          const raw = await res.json();
-          return JSON.parse(raw.contents);
-        }
-        return await res.json();
-      }
-      attempts.push(`${proxy.name}=HTTP_${res.status}`);
-    } catch (e) {
-      attempts.push(`${proxy.name}=${e.message}`);
-    }
-  }
-
-  // 3. Final Fallback: If we reach here, nothing worked.
-  // We throw an error instead of returning fake data, so the 
-  // UI triggers the "Couldn't reach news" state correctly.
-  throw new Error(`NEWSDATA_HTTP_Failed: ${attempts.join(' | ')}`);
-}
-
-
-
-async function fetchNews(topics, existingIds = []) {
-  const topic = topics[Math.floor(Math.random() * topics.length)];
-  const category = TOPIC_CATEGORY[topic] || 'world';
-  const url = `https://newsdata.io/api/1/latest?apikey=${NEWSDATA_KEY}&language=en&category=${category}&size=10`;
-
-  let res;
-  try {
-    res = await fetchWithCorsFallback(url);
-  } catch (e) {
-    throw new Error('CORS_OR_NETWORK_BLOCK: ' + e.message);
-  }
-
-  if (!res.ok) {
-    let txt = '';
-    try { txt = await res.text(); } catch {}
-    throw new Error(`NEWSDATA_HTTP_${res.status}: ${txt}`);
-  }
-
-  const data = await res.json();
-  if (data.status !== 'success') throw new Error('NEWSDATA_API_ERROR: ' + JSON.stringify(data));
-
-  const raw = (data.results || []).filter(a => a.title && a.description && a.description.length > 40);
-  if (raw.length === 0) throw new Error('NO_ARTICLES: NewsData returned zero usable articles');
-
-  const batch = raw.slice(0, 6);
-  return batch.map(a => ({
-    id: slugify(a.title),
-    topic: classifyTopic(a.title, a.description),
-    title: a.title,
-    body: a.description,
-    question: generateQuestion(a.title, a.description),
-    source: a.source_name || a.source_id || 'Global News',
-    publishedAt: a.pubDate || new Date().toISOString(),
-    url: a.link || '#',
-    imageUrl: a.image_url || null,
-  }));
-}
-
-// ════════════════════════════════════════════════════════════════════════════
-// AI RESPONSES (real Claude API calls)
-// ════════════════════════════════════════════════════════════════════════════
-async function callClaude(systemPrompt, userContent, maxTokens = 280) {
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-6',
-      max_tokens: maxTokens,
-      system: systemPrompt,
-      messages: [{ role: 'user', content: userContent }]
-    })
-  });
-  if (!res.ok) throw new Error(`Claude API error ${res.status}`);
-  const data = await res.json();
-  return data.content?.[0]?.text?.trim() || '';
-}
-
-async function getAIResponse(article, userComment) {
-  const system = `You are Pulse AI — sharp, curious, globally-minded. A reader shared their take on a news story.
-1. Briefly acknowledge their view (1 sentence, no sycophancy)
-2. Add 2-3 specific facts or angles they likely don't know
-3. Connect it to a broader trend
-4. End with one sharp forward-looking thought
-Under 150 words. Flowing prose, no bullet points. Never start with "Great point".`;
-  const content = `Story: "${article.title}"\nContext: ${article.body}\nQuestion: "${article.question}"\nReader's response: "${userComment}"`;
-  return await callClaude(system, content, 280);
-}
-
-// FEATURE 8: TWO-AI DEBATE — optimist vs skeptic
-async function getDebateResponses(article, userComment) {
-  const optimistSystem = `You are "Optimist AI" in a debate. A reader shared a take on a news story. Respond in 2-3 sentences arguing the hopeful, opportunity-focused interpretation of this story. Be specific, not generic. Address the reader's comment directly.`;
-  const skepticSystem = `You are "Skeptic AI" in a debate. A reader shared a take on a news story. Respond in 2-3 sentences arguing the cautious, risk-focused interpretation of this story. Be specific, not generic. Address the reader's comment directly, and where natural, gently push back on what Optimist AI might say.`;
-  const content = `Story: "${article.title}"\nContext: ${article.body}\nReader said: "${userComment}"`;
-
-  const [optimist, skeptic] = await Promise.all([
-    callClaude(optimistSystem, content, 150),
-    callClaude(skepticSystem, content, 150)
-  ]);
-  return { optimist, skeptic };
-}
-
-// FEATURE 9: FOSSIL REVISIT
-async function getFossilRevisit(article, oldComment) {
-  const system = `You are Pulse AI. A reader commented on a news story over 30 days ago. Revisit their take now: gently note what's happened since (use general world knowledge, acknowledge uncertainty if you don't know specifics), and ask if their view changed. Under 90 words, conversational, not preachy.`;
-  const content = `Story: "${article.title}"\nTheir take from a month ago: "${oldComment}"`;
-  return await callClaude(system, content, 180);
-}
-
-// FEATURE 10: COUNTER-CARD — AI generates opposing view of a real story
-async function generateCounterCard(sourceArticle) {
-  const system = `You are a counter-argument generator for a news app. Given a news story, write the strongest good-faith OPPOSING perspective to the obvious reading of it. Return ONLY valid JSON, no markdown: {"title":"A punchy counter-headline","body":"2-3 sentences making the strongest opposing case, factual and fair, not strawmanning.","question":"A question that challenges the reader's assumption."}`;
-  const content = `Original story: "${sourceArticle.title}"\nContext: ${sourceArticle.body}`;
-  try {
-    const text = await callClaude(system, content, 300);
-    const clean = text.replace(/```json|```/gi, '').trim();
-    const start = clean.indexOf('{'); const end = clean.lastIndexOf('}');
-    if (start === -1 || end === -1) return null;
-    const parsed = JSON.parse(clean.slice(start, end + 1));
-    return {
-      id: 'counter-' + sourceArticle.id,
-      topic: sourceArticle.topic,
-      title: parsed.title,
-      body: parsed.body,
-      question: parsed.question,
-      isCounter: true,
-      sourceTitle: sourceArticle.title
-    };
-  } catch { return null; }
-}
-
-// FEATURE 12: TIME-SHIFTED REFRAME (used inside compression / on demand)
-async function getTimeShiftedVersion(article) {
-  const system = `Rewrite this modern headline and one-sentence summary as if it were written by a journalist 10 years ago — same core event, but period-appropriate language, assumptions, and framing. Return ONLY valid JSON: {"title":"...", "body":"..."}`;
-  const content = `Modern headline: "${article.title}"\nModern summary: ${article.body}`;
-  try {
-    const text = await callClaude(system, content, 200);
-    const clean = text.replace(/```json|```/gi, '').trim();
-    const start = clean.indexOf('{'); const end = clean.lastIndexOf('}');
-    if (start === -1 || end === -1) return null;
-    return JSON.parse(clean.slice(start, end + 1));
-  } catch { return null; }
-}
-
-// FEATURE 11 (part of compression mode): meta-summary of all visible cards
-async function getCompressionSummary(articles) {
-  const system = `You are Pulse AI's "60-Second Mode." Given several news headlines, write ONE tight paragraph (max 90 words) that synthesizes what's happening across all of them — find the thread connecting them if one exists, otherwise just compress efficiently. No bullet points, no headers, flowing prose.`;
-  const content = articles.map(a => `- [${a.topic}] ${a.title}: ${a.body}`).join('\n');
-  return await callClaude(system, content, 220);
-}
-
-// ════════════════════════════════════════════════════════════════════════════
-// RENDERING
-// ════════════════════════════════════════════════════════════════════════════
-function timeAgo(iso) {
-  if (!iso) return 'just now';
-  const diff = (Date.now() - new Date(iso)) / 1000;
-  if (diff < 60) return 'just now';
-  if (diff < 3600) return `${Math.floor(diff/60)}m ago`;
-  if (diff < 86400) return `${Math.floor(diff/3600)}h ago`;
-  return `${Math.floor(diff/86400)}d ago`;
-}
-
-function escHtml(s) {
-  return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-
-function renderCard(article, indexInBatch) {
-  const icon = TAG_ICON[article.topic] || '📰';
-  const tagCls = 'tag-' + article.topic.toLowerCase();
-  const existing = getComment(article.id);
-  const card = document.createElement('div');
-  card.className = 'card';
-  card.id = `card-${article.id}`;
-  card.style.animationDelay = `${(indexInBatch % PAGE_SIZE) * 60}ms`;
-
-  // FEATURE: Counter-card styling
-  if (article.isCounter) card.classList.add('counter-card');
-
-  const commentHTML = existing
-    ? buildThreadHTML(article, existing)
-    : buildInputHTML(article.id);
-
-  // FEATURE: Image with fallback
-  const imageHTML = article.imageUrl
-    ? `<div class="card-image-wrap">
-         <img class="card-image" src="${article.imageUrl}" alt="" loading="lazy"
-              onload="this.classList.add('loaded')"
-              onerror="this.parentElement.innerHTML='<div class=card-image-fallback>${icon}</div>'">
-       </div>`
-    : `<div class="card-image-wrap"><div class="card-image-fallback">${icon}</div></div>`;
-
-  const counterLabel = article.isCounter
-    ? `<div style="font-size:11px;color:var(--orange);font-weight:600;margin-bottom:6px;">↺ COUNTER-TAKE on "${escHtml(article.sourceTitle).slice(0,50)}..."</div>`
-    : '';
-
-  card.innerHTML = `
-    ${imageHTML}
-    <div class="card-top">
-      <div class="card-meta">
-        <span class="card-tag ${article.isCounter ? 'tag-counter' : tagCls}">${article.isCounter ? '↺' : icon} ${article.isCounter ? 'Counter-Take' : article.topic}</span>
-        <span class="card-time">${timeAgo(article.publishedAt)}</span>
-      </div>
-      ${counterLabel}
-      <div class="card-title">${escHtml(article.title)}</div>
-      <div class="card-body">${escHtml(article.body)}</div>
-      ${!article.isCounter ? `<div id="timeshift-${article.id}"></div>
-      <button class="debate-btn" style="margin-top:8px;font-size:11.5px;padding:6px 10px;" onclick="showTimeShift('${article.id}', event)">🕰️ See this headline 10 years ago</button>` : ''}
-      ${!article.isCounter ? `<div class="card-source">
-        <span class="source-dot"></span>
-        <span>${escHtml(article.source || 'Global News')}</span>
-        ${article.url && article.url !== '#' ? `<a href="${article.url}" target="_blank" rel="noopener">Read →</a>` : ''}
-      </div>` : ''}
-    </div>
-    <div class="card-question-wrap">
-      <div class="card-question-label">Ask yourself</div>
-      <div class="card-question-text">${escHtml(article.question)}</div>
-    </div>
-    <div class="card-divider"></div>
-    <div class="comment-section" id="cs-${article.id}">${commentHTML}</div>
-  `;
-
-  // Decay overlay on the title/body area
-  if (!article.isCounter) applyDecayOverlay(card.querySelector('.card-body'), article.publishedAt);
-
-  return card;
-}
-
-function buildInputHTML(articleId) {
-  return `
-    <div class="comment-input-wrap">
-      <textarea class="comment-input" id="ta-${articleId}" placeholder="Share your thoughts…" rows="3"></textarea>
-      <div class="comment-actions">
-        <button class="debate-btn" onclick="submitComment('${articleId}', true)">⚔️ Get both sides</button>
-        <button class="comment-send" onclick="submitComment('${articleId}', false)">Send ↑</button>
-      </div>
-    </div>
-  `;
-}
-
-function buildThreadHTML(article, entry) {
-  const t = entry.time ? new Date(entry.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
-  let fossilHTML = '';
-
-  if (checkFossil(entry)) {
-    fossilHTML = `<div class="fossil-banner" id="fossil-${article.id}">
-      <span>🦴</span>
-      <span>You said this 30+ days ago. <a href="#" onclick="revealFossil('${article.id}', event)" style="color:#8A5A00;font-weight:600;">See what's changed →</a></span>
-    </div>`;
-  }
-
-  if (entry.debate) {
-    return `
-      ${fossilHTML}
-      <div class="thread">
-        <div class="bubble user">
-          <div class="bubble-avatar">YOU</div>
-          <div class="bubble-content"><div class="bubble-name">You</div><div class="bubble-text">${escHtml(entry.user)}</div><div class="bubble-time">${t}</div></div>
-        </div>
-        <div class="bubble ai optimist">
-          <div class="bubble-avatar">+</div>
-          <div class="bubble-content"><div class="bubble-name">Optimist AI</div><div class="bubble-text">${entry.optimist}</div></div>
-        </div>
-        <div class="bubble ai skeptic">
-          <div class="bubble-avatar">−</div>
-          <div class="bubble-content"><div class="bubble-name">Skeptic AI</div><div class="bubble-text">${entry.skeptic}</div></div>
-        </div>
-      </div>
-      <div id="fossil-reveal-${article.id}"></div>
-    `;
-  }
-
-  return `
-    ${fossilHTML}
-    <div class="thread">
-      <div class="bubble user">
-        <div class="bubble-avatar">YOU</div>
-        <div class="bubble-content"><div class="bubble-name">You</div><div class="bubble-text">${escHtml(entry.user)}</div><div class="bubble-time">${t}</div></div>
-      </div>
-      <div class="bubble ai">
-        <div class="bubble-avatar">AI</div>
-        <div class="bubble-content"><div class="bubble-name">Pulse AI</div><div class="bubble-text">${entry.ai}</div><div class="bubble-time">Just now</div></div>
-      </div>
-    </div>
-    <div id="fossil-reveal-${article.id}"></div>
-  `;
-}
-
-function thinkingHTML(label = 'Pulse AI') {
-  return `<div class="thread"><div class="bubble ai"><div class="bubble-avatar">AI</div><div class="bubble-content"><div class="bubble-name">${label}</div><div class="bubble-text"><div class="thinking-dots"><span></span><span></span><span></span></div></div></div></div></div>`;
-}
-
-async function revealFossil(articleId, e) {
-  e.preventDefault();
-  const article = allArticles.find(a => a.id === articleId);
-  const entry = getComment(articleId);
-  const container = document.getElementById(`fossil-reveal-${articleId}`);
-  const banner = document.getElementById(`fossil-${articleId}`);
-  if (!article || !entry) return;
-
-  banner.innerHTML = `<span>🦴</span><span>Looking back...</span>`;
-  container.innerHTML = thinkingHTML('Pulse AI · Looking back');
-
-  try {
-    const revisit = await getFossilRevisit(article, entry.user);
-    container.innerHTML = `<div class="thread"><div class="bubble ai"><div class="bubble-avatar">⏳</div><div class="bubble-content"><div class="bubble-name">30 Days Later</div><div class="bubble-text">${revisit}</div></div></div></div>`;
-    markFossilShown(articleId);
-    banner.style.display = 'none';
-  } catch {
-    container.innerHTML = '';
-    banner.innerHTML = `<span>🦴</span><span>Couldn't look back right now. Try again later.</span>`;
-  }
-}
-
-// ── SUBMIT COMMENT (with optional debate mode) ───────────────────────────────
-async function submitComment(articleId, debateMode) {
-  const ta = document.getElementById(`ta-${articleId}`);
-  const cs = document.getElementById(`cs-${articleId}`);
-  const userText = ta ? ta.value.trim() : '';
-  if (!userText) {
-    if (ta) { ta.style.borderColor = 'var(--red)'; setTimeout(() => ta.style.borderColor = '', 1500); }
-    return;
-  }
-
-  const article = allArticles.find(a => a.id === articleId);
-  if (!article) return;
-
-  // Record DNA + bias silently
-  recordDnaEngagement(article.topic);
-  logBiasStance(article.topic, classifyStance(userText));
-
-  cs.innerHTML = `
-    <div class="thread">
-      <div class="bubble user"><div class="bubble-avatar">YOU</div><div class="bubble-content"><div class="bubble-name">You</div><div class="bubble-text">${escHtml(userText)}</div></div></div>
-    </div>
-    ${debateMode ? `
-      <div class="thread" style="margin-top:10px;">
-        <div class="bubble ai optimist"><div class="bubble-avatar">+</div><div class="bubble-content"><div class="bubble-name">Optimist AI</div><div class="bubble-text"><div class="thinking-dots"><span></span><span></span><span></span></div></div></div></div>
-        <div class="bubble ai skeptic"><div class="bubble-avatar">−</div><div class="bubble-content"><div class="bubble-name">Skeptic AI</div><div class="bubble-text"><div class="thinking-dots"><span></span><span></span><span></span></div></div></div></div>
-      </div>
-    ` : `
-      <div class="thread" style="margin-top:10px;">
-        <div class="bubble ai"><div class="bubble-avatar">AI</div><div class="bubble-content"><div class="bubble-name">Pulse AI</div><div class="bubble-text"><div class="thinking-dots"><span></span><span></span><span></span></div></div></div></div>
-      </div>
-    `}
-  `;
-
-  try {
-    if (debateMode) {
-      const { optimist, skeptic } = await getDebateResponses(article, userText);
-      saveComment(articleId, userText, null, { debate: true, optimist, skeptic });
-      cs.innerHTML = buildThreadHTML(article, getComment(articleId));
-    } else {
-      const aiText = await getAIResponse(article, userText);
-      saveComment(articleId, userText, aiText);
-      cs.innerHTML = buildThreadHTML(article, getComment(articleId));
-    }
-  } catch (e) {
-    cs.innerHTML = buildInputHTML(articleId);
-    const newTa = document.getElementById(`ta-${articleId}`);
-    if (newTa) { newTa.value = userText; newTa.style.borderColor = 'var(--red)'; }
-  }
-}
-
-// FEATURE 12 trigger: show time-shifted headline on demand
-async function showTimeShift(articleId, e) {
-  e.preventDefault();
-  const btn = e.target;
-  const article = allArticles.find(a => a.id === articleId);
-  const container = document.getElementById(`timeshift-${articleId}`);
-  if (!article || !container) return;
-
-  btn.disabled = true;
-  btn.textContent = '🕰️ Time-traveling...';
-  container.innerHTML = `<div class="thinking-dots" style="margin:8px 0;"><span></span><span></span><span></span></div>`;
-
-  try {
-    const shifted = await getTimeShiftedVersion(article);
-    if (shifted) {
-      container.innerHTML = `
-        <div style="background:var(--bg-inset);border-radius:12px;padding:12px;margin:8px 0;border-left:3px solid var(--label3);">
-          <div style="font-size:10.5px;text-transform:uppercase;letter-spacing:0.06em;color:var(--label3);margin-bottom:6px;">10 Years Ago, This Might Have Read:</div>
-          <div style="font-size:14px;font-weight:700;margin-bottom:4px;">${escHtml(shifted.title)}</div>
-          <div style="font-size:13px;color:var(--label2);line-height:1.5;">${escHtml(shifted.body)}</div>
-        </div>`;
-    } else {
-      container.innerHTML = `<div style="font-size:12px;color:var(--label3);margin:6px 0;">Couldn't time-travel right now.</div>`;
-    }
-  } catch {
-    container.innerHTML = `<div style="font-size:12px;color:var(--label3);margin:6px 0;">Couldn't time-travel right now.</div>`;
-  }
-  btn.remove();
-}
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'Enter' && !e.shiftKey && e.target.classList.contains('comment-input')) {
-    e.preventDefault();
-    const id = e.target.id.replace('ta-', '');
-    submitComment(id, false);
-  }
-});
-
-// ════════════════════════════════════════════════════════════════════════════
-// SILENT CARD (Feature: no AI take, just space)
-// ════════════════════════════════════════════════════════════════════════════
-const SILENT_PROMPTS = [
-  "Before you scroll — what do you actually think happened here, before anyone tells you what to think?",
-  "No AI take this time. Just sit with the last story for a second.",
-  "This space is intentionally empty. What's your gut reaction to what you just read?",
-  "Pause. What would you have predicted about this a year ago?"
-];
-
-function renderSilentCard() {
-  const card = document.createElement('div');
-  card.className = 'card silent-card';
-  const prompt = SILENT_PROMPTS[Math.floor(Math.random() * SILENT_PROMPTS.length)];
-  card.innerHTML = `<div class="silent-icon">◌</div><div class="silent-text">${prompt}</div>`;
-  return card;
-}
-
-// ════════════════════════════════════════════════════════════════════════════
-// COMPRESSION MODE (60-second mode)
-// ════════════════════════════════════════════════════════════════════════════
-let compressionOpen = false;
-
-async function toggleCompression() {
-  const panel = document.getElementById('compression-panel');
-  compressionOpen = !compressionOpen;
-
-  if (!compressionOpen) { panel.classList.remove('visible'); return; }
-
-  panel.classList.add('visible');
-  panel.innerHTML = `<h3>⚡ Synthesizing</h3><div class="thinking-dots"><span></span><span></span><span></span></div>`;
-
-  const visible = allArticles.filter(a => !a.isCounter).slice(0, displayedCount || 6);
-  if (visible.length === 0) {
-    panel.innerHTML = `<h3>⚡ 60-Second Mode</h3><p>Load some stories first, then come back here.</p>`;
-    return;
-  }
-
-  try {
-    const summary = await getCompressionSummary(visible);
-    panel.innerHTML = `<h3>⚡ If you only have 60 seconds</h3><p>${summary}</p>`;
-  } catch {
-    panel.innerHTML = `<h3>⚡ 60-Second Mode</h3><p>Couldn't generate a summary right now. Try again in a moment.</p>`;
-  }
-}
-
-// ════════════════════════════════════════════════════════════════════════════
-// FEED ASSEMBLY — interleaves counter-cards and silent cards
-// ════════════════════════════════════════════════════════════════════════════
-function filteredArticles() {
-  if (activeFilter === 'all') return allArticles.filter(a => !a.isCounter);
-  return allArticles.filter(a => a.topic === activeFilter && !a.isCounter);
-}
-
-async function displayNextPage() {
-  const articles = filteredArticles();
-  const slice = articles.slice(displayedCount, displayedCount + PAGE_SIZE);
-  const feed = document.getElementById('feed');
-
-  for (let i = 0; i < slice.length; i++) {
-    const article = slice[i];
-    cardCounter++;
-
-    const card = renderCard(article, i);
-    feed.appendChild(card);
-    startPaceTracking(card, article.id);
-
-    // Trigger ambient sound for first visible card of batch
-    if (i === 0) playAmbientForTopic(article.topic);
-
-    // FEATURE: Silent card every 7th position
-    if (cardCounter % 7 === 0) {
-      feed.appendChild(renderSilentCard());
-    }
-
-    // FEATURE: Counter-card every 5th position (async, non-blocking)
-    if (cardCounter % 5 === 0) {
-      generateCounterCard(article).then(counter => {
-        if (counter) {
-          allArticles.push(counter);
-          const counterCard = renderCard(counter, 0);
-          feed.appendChild(counterCard);
-        }
-      }).catch(() => {});
-    }
-  }
-
-  displayedCount += slice.length;
-}
-
-// ════════════════════════════════════════════════════════════════════════════
-// SKELETONS / STATES
-// ════════════════════════════════════════════════════════════════════════════
-function showSkeletons(n = 3) {
-  const feed = document.getElementById('feed');
-  for (let i = 0; i < n; i++) {
-    const sk = document.createElement('div');
-    sk.className = 'skeleton-card';
-    sk.innerHTML = `<div class="skel skel-tag"></div><div class="skel skel-title"></div><div class="skel skel-title2"></div><div class="skel skel-body"></div><div class="skel skel-body2"></div><div class="skel skel-body3"></div>`;
-    feed.appendChild(sk);
-  }
-}
-function clearSkeletons() { document.querySelectorAll('.skeleton-card').forEach(el => el.remove()); }
-
-// ════════════════════════════════════════════════════════════════════════════
-// LOAD / REFRESH / FILTER / INFINITE SCROLL
-// ════════════════════════════════════════════════════════════════════════════
-async function loadMore() {
-  if (isLoading) return;
-  isLoading = true;
-  document.getElementById('load-spinner').classList.add('visible');
-
-  try {
-    const topics = activeFilter === 'all'
-      ? ['Tech','Science','World','Business','Health','Space','Climate']
-      : [activeFilter];
-    const existingIds = allArticles.map(a => a.id);
-    const newArticles = await fetchNews(topics, existingIds);
-    allArticles.push(...newArticles);
-    await displayNextPage();
-  } catch (err) {
-    console.error('Load more failed:', err);
-    if (displayedCount === 0) {
-      document.getElementById('feed').innerHTML = `
-        <div class="state-card">
-          <div class="state-icon">📡</div>
-          <div class="state-title">Couldn't load news</div>
-          <div class="state-body">Check your connection and try again.</div>
-          <button class="state-btn" onclick="refreshFeed()">Try again</button>
-        </div>`;
-    }
-  }
-
-  document.getElementById('load-spinner').classList.remove('visible');
-  isLoading = false;
-}
-
-async function initialLoad() {
-  const feed = document.getElementById('feed');
-  feed.innerHTML = '';
-  displayedCount = 0;
-  cardCounter = 0;
-  showSkeletons(4);
-
-  let usingCache = false;
-
-  try {
-    const topics = ['Tech','Science','World','Business','Health','Space','Climate'];
-    allArticles = await fetchNews(topics, []);
-
-    // Live fetch succeeded — save it as the fallback cache for next time
-    try {
-      localStorage.setItem(ARTICLES_CACHE_KEY, JSON.stringify(allArticles));
-      localStorage.setItem(ARTICLES_CACHE_TIME_KEY, Date.now().toString());
-    } catch {} // localStorage can fail (quota/private mode) — non-fatal, just skip caching
-
-  } catch (err) {
-    // Live fetch failed (network block, CORS, API down, etc).
-    // Before giving up, check if we have REAL news saved from a previous successful load.
-    let cached = null;
-    try {
-      const raw = localStorage.getItem(ARTICLES_CACHE_KEY);
-      const cachedTime = parseInt(localStorage.getItem(ARTICLES_CACHE_TIME_KEY) || '0', 10);
-      const age = Date.now() - cachedTime;
-      if (raw && age < CACHE_MAX_AGE_MS) {
-        cached = JSON.parse(raw);
-      }
-    } catch {}
-
-    if (cached && cached.length > 0) {
-      // We have real news from earlier — show it, clearly labeled as not fresh
-      allArticles = cached;
-      usingCache = true;
-    } else {
-      // No usable cache. Show an honest error — never fabricated articles.
-      clearSkeletons();
-      const reason = err.message || 'Unknown error';
-      let humanHint = 'Check your connection and try again.';
-      if (reason.startsWith('CORS_OR_NETWORK_BLOCK')) {
-        humanHint = 'Your network (often an office/school WiFi firewall) is blocking this request, or the news source is unreachable right now.';
-      } else if (reason.includes('NEWSDATA_HTTP_401') || reason.includes('NEWSDATA_HTTP_403')) {
-        humanHint = 'The news API key was rejected (invalid, expired, or out of free credits).';
-      } else if (reason.includes('NEWSDATA_HTTP_429')) {
-        humanHint = 'Daily free-tier limit reached on the news source. Try again tomorrow.';
-      } else if (reason.startsWith('NO_ARTICLES')) {
-        humanHint = 'The news source responded but had nothing usable right now.';
-      }
-      feed.innerHTML = `
-        <div class="state-card">
-          <div class="state-icon">📡</div>
-          <div class="state-title">Couldn't fetch today's news</div>
-          <div class="state-body">${humanHint}</div>
-          <div style="margin-top:10px;font-size:11px;color:var(--label3);word-break:break-word;font-family:monospace;">${escHtml(reason.slice(0, 200))}</div>
-          <button class="state-btn" onclick="refreshFeed()">Try again</button>
-        </div>`;
-      isLoading = false;
-      return;
-    }
-  }
-
-  clearSkeletons();
-
-  if (usingCache) {
-    const cachedTime = parseInt(localStorage.getItem(ARTICLES_CACHE_TIME_KEY) || '0', 10);
-    const banner = document.createElement('div');
-    banner.className = 'card';
-    banner.style.background = 'var(--bg-inset)';
-    banner.style.border = '1px dashed var(--label3)';
-    banner.innerHTML = `
-      <div style="padding:14px 16px;font-size:13px;color:var(--label2);display:flex;align-items:center;gap:8px;">
-        <span style="font-size:16px;">📡</span>
-        <span>Couldn't reach the live news source right now — showing your last successfully loaded stories from ${timeAgo(new Date(cachedTime).toISOString())}.</span>
-      </div>`;
-    feed.appendChild(banner);
-  }
-
-  await displayNextPage();
-  renderBiasMirrorBanner();
-  isLoading = false;
-}
-
-function refreshFeed() {
-  document.getElementById('refresh-btn').classList.add('spinning');
-  initialLoad().then(() => document.getElementById('refresh-btn').classList.remove('spinning'));
-}
-
-document.getElementById('chips').addEventListener('click', e => {
-  const chip = e.target.closest('.chip');
-  if (!chip) return;
-  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-  chip.classList.add('active');
-  activeFilter = chip.dataset.topic;
-  displayedCount = 0;
-  cardCounter = 0;
-  document.getElementById('feed').innerHTML = '';
-
-  const visible = filteredArticles();
-  if (visible.length > 0) displayNextPage();
-  else loadMore();
-});
-
-const observer = new IntersectionObserver(entries => {
-  if (entries[0].isIntersecting && !isLoading) {
-    const visible = filteredArticles();
-    if (displayedCount < visible.length) displayNextPage();
-    else loadMore();
-  }
-}, { rootMargin: '200px' });
-observer.observe(document.getElementById('load-trigger'));
-
-// ════════════════════════════════════════════════════════════════════════════
-// BOOT
-// ════════════════════════════════════════════════════════════════════════════
-initTheme();
-renderDnaBadge();
-initialLoad();
-
-</script>
-</body>
-</html>
