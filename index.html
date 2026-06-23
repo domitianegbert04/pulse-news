@@ -3,47 +3,83 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Pulse — AI News</title>
+<title>Pulse — News You Actually Think About</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
   --bg: #F2F2F7;
   --surface: #FFFFFF;
-  --surface2: #F2F2F7;
-  --surface3: #E5E5EA;
+  --surface-raised: #FFFFFF;
+  --bg-inset: #F2F2F7;
   --label: #000000;
   --label2: #3C3C43;
   --label3: #8E8E93;
   --separator: rgba(60,60,67,0.12);
   --blue: #007AFF;
   --blue-light: #EBF4FF;
+  --green: #34C759;
+  --orange: #FF9500;
+  --red: #FF3B30;
+  --purple: #AF52DE;
+  --teal: #32ADE6;
+  --indigo: #5856D6;
   --radius-card: 20px;
   --radius-btn: 14px;
   --radius-pill: 100px;
   --shadow-card: 0 2px 12px rgba(0,0,0,0.07), 0 1px 3px rgba(0,0,0,0.05);
   --shadow-raised: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
   --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --nav-blur-bg: rgba(242,242,247,0.85);
+  --skel-base: #E5E5EA;
+  --skel-shine: #F2F2F7;
+  --img-placeholder-1: #D6D6E0;
+  --img-placeholder-2: #C2C2D1;
 }
+
+html[data-theme="dark"] {
+  --bg: #000000;
+  --surface: #1C1C1E;
+  --surface-raised: #2C2C2E;
+  --bg-inset: #1C1C1E;
+  --label: #FFFFFF;
+  --label2: #EBEBF0;
+  --label3: #8E8E93;
+  --separator: rgba(84,84,88,0.4);
+  --blue: #0A84FF;
+  --blue-light: #0A2540;
+  --shadow-card: 0 2px 12px rgba(0,0,0,0.4), 0 1px 3px rgba(0,0,0,0.3);
+  --shadow-raised: 0 8px 32px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.3);
+  --nav-blur-bg: rgba(0,0,0,0.75);
+  --skel-base: #2C2C2E;
+  --skel-shine: #3A3A3C;
+  --img-placeholder-1: #2C2C3A;
+  --img-placeholder-2: #1A1A24;
+}
+
+html { -webkit-font-smoothing: antialiased; color-scheme: light dark; }
 
 body {
   font-family: var(--font);
   background: var(--bg);
   color: var(--label);
   min-height: 100vh;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
+/* ── NAV ── */
 .nav {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(242,242,247,0.85);
+  background: var(--nav-blur-bg);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border-bottom: 1px solid var(--separator);
   padding: 0 16px;
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .nav-inner {
@@ -59,6 +95,7 @@ body {
   font-size: 22px;
   font-weight: 700;
   letter-spacing: -0.5px;
+  color: var(--label);
   display: flex;
   align-items: center;
   gap: 6px;
@@ -76,29 +113,58 @@ body {
   50% { transform: scale(1.4); opacity:0.6; }
 }
 
-.refresh-btn {
+.nav-right { display: flex; align-items: center; gap: 8px; }
+
+.icon-btn {
   width: 34px; height: 34px;
   border-radius: 50%;
   border: none;
   background: var(--surface);
   color: var(--blue);
-  font-size: 16px;
+  font-size: 15px;
   cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   box-shadow: var(--shadow-card);
-  transition: transform 0.2s;
+  transition: transform 0.2s, background 0.15s;
 }
-.refresh-btn.spinning { animation: spin 1s linear infinite; }
+.icon-btn:hover { transform: scale(1.08); }
+.icon-btn:active { transform: scale(0.94); }
+.icon-btn.spinning { animation: spin 1s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
+.theme-toggle {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: var(--surface);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: var(--shadow-card);
+  font-size: 15px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+.theme-toggle:active { transform: scale(0.9); }
+.theme-toggle .icon-sun, .theme-toggle .icon-moon {
+  position: absolute;
+  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s;
+}
+html[data-theme="dark"] .theme-toggle .icon-sun { transform: translateY(30px) rotate(90deg); opacity: 0; }
+html[data-theme="dark"] .theme-toggle .icon-moon { transform: translateY(0) rotate(0); opacity: 1; }
+html[data-theme="light"] .theme-toggle .icon-sun { transform: translateY(0) rotate(0); opacity: 1; }
+html[data-theme="light"] .theme-toggle .icon-moon { transform: translateY(-30px) rotate(-90deg); opacity: 0; }
+
+/* ── FILTER CHIPS ── */
 .chips-wrap {
-  background: rgba(242,242,247,0.85);
+  background: var(--nav-blur-bg);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   position: sticky;
   top: 57px;
   z-index: 99;
   border-bottom: 1px solid var(--separator);
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .chips {
@@ -117,20 +183,70 @@ body {
   padding: 6px 14px;
   border-radius: var(--radius-pill);
   border: none;
+  font-family: var(--font);
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
+  transition: all 0.2s;
   background: var(--surface);
   color: var(--label2);
   box-shadow: var(--shadow-card);
 }
 
-.chip.active {
-  background: var(--label);
-  color: white;
-  box-shadow: none;
+.chip.active { background: var(--label); color: var(--bg); box-shadow: none; }
+
+/* ── COMPRESSION MODE BAR ── */
+.compression-bar {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0 16px;
 }
 
+.compression-toggle {
+  margin-top: 10px;
+  width: 100%;
+  padding: 10px 14px;
+  background: linear-gradient(135deg, var(--indigo), var(--purple));
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: transform 0.2s;
+}
+.compression-toggle:active { transform: scale(0.98); }
+
+.compression-panel {
+  display: none;
+  background: var(--surface);
+  border-radius: var(--radius-card);
+  padding: 18px;
+  margin: 10px auto 0;
+  box-shadow: var(--shadow-card);
+  max-width: 680px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--label2);
+}
+.compression-panel.visible { display: block; animation: cardIn 0.3s ease both; }
+.compression-panel h3 {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--label3);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ── FEED ── */
 .feed {
   max-width: 680px;
   margin: 0 auto;
@@ -140,11 +256,13 @@ body {
   gap: 14px;
 }
 
+/* ── CARD ── */
 .card {
   background: var(--surface);
   border-radius: var(--radius-card);
   box-shadow: var(--shadow-card);
   overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.3s ease;
   animation: cardIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
 }
 
@@ -153,75 +271,284 @@ body {
   to   { opacity:1; transform: translateY(0) scale(1); }
 }
 
+.card:hover { transform: translateY(-2px); box-shadow: var(--shadow-raised); }
+
+/* Image */
+.card-image-wrap {
+  width: 100%;
+  height: 180px;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--img-placeholder-1), var(--img-placeholder-2));
+}
+
+.card-image {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.card-image.loaded { opacity: 1; }
+
+.card-image-fallback {
+  width: 100%; height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 38px;
+  opacity: 0.5;
+}
+
+/* Decay overlay — story gets visually "older" */
+.decay-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0);
+  backdrop-filter: blur(0px);
+  pointer-events: none;
+  transition: all 1s ease;
+}
+
 .card-top { padding: 16px 16px 12px; }
+
 .card-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
 
 .card-tag {
-  font-size: 11px;
-  font-weight: 600;
+  display: flex; align-items: center; gap: 5px;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.04em;
   text-transform: uppercase;
   padding: 4px 10px;
   border-radius: var(--radius-pill);
 }
 
-.tag-tech { background: #EBF4FF; color: #007AFF; }
-.tag-science { background: #F0F0FF; color: #5856D6; }
-.tag-world { background: #FFF0EB; color: #FF6B35; }
-.tag-business { background: #F0FFF4; color: #34C759; }
-
 .card-time { font-size: 12px; color: var(--label3); }
-.card-title { font-size: 17px; font-weight: 700; line-height: 1.3; margin-bottom: 8px; }
+
+.card-title { font-size: 17px; font-weight: 700; line-height: 1.3; letter-spacing: -0.2px; color: var(--label); margin-bottom: 8px; }
 .card-body { font-size: 14px; line-height: 1.6; color: var(--label2); }
+
 .card-source { display: flex; align-items: center; gap: 6px; margin-top: 12px; font-size: 12px; color: var(--label3); }
 .source-dot { width: 5px; height: 5px; background: var(--label3); border-radius: 50%; }
+.card-source a { margin-left: auto; font-size: 11px; color: var(--blue); text-decoration: none; font-weight: 500; }
 
-.card-question-wrap {
-  margin: 0 16px 12px;
-  padding: 14px;
-  background: var(--bg);
-  border-radius: 14px;
+/* Counter-card style */
+.card.counter-card {
+  border: 1.5px solid var(--orange);
+  background: var(--surface);
 }
-.card-question-label { font-size: 11px; font-weight: 600; color: var(--label3); text-transform: uppercase; margin-bottom: 6px; }
-.card-question-text { font-size: 14px; font-weight: 500; color: var(--label); }
-.card-divider { height: 1px; background: var(--separator); margin: 0 16px 14px; }
+.counter-card .card-tag.tag-counter { background: #FFF3E0; color: #FF9500; }
+html[data-theme="dark"] .counter-card .card-tag.tag-counter { background: #3A2B0F; color: #FFB340; }
+
+/* Silent card */
+.card.silent-card {
+  background: var(--bg-inset);
+  text-align: center;
+  padding: 32px 20px;
+}
+.silent-card .silent-icon { font-size: 28px; margin-bottom: 10px; opacity: 0.5; }
+.silent-card .silent-text { font-size: 15px; color: var(--label2); font-style: italic; line-height: 1.6; }
+
+/* ── QUESTION ── */
+.card-question-wrap {
+  margin: 0 16px;
+  padding: 14px;
+  background: var(--bg-inset);
+  border-radius: 14px;
+  margin-bottom: 12px;
+  transition: background 0.3s ease;
+}
+
+.card-question-label { font-size: 11px; font-weight: 600; color: var(--label3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+.card-question-text { font-size: 14px; font-weight: 500; color: var(--label); line-height: 1.5; }
+
+/* ── COMMENT SECTION ── */
 .comment-section { padding: 0 16px 16px; }
 
 .comment-input-wrap { display: flex; flex-direction: column; gap: 10px; }
+
 .comment-input {
-  width: 100%; padding: 12px 14px; border-radius: 14px; border: 1.5px solid var(--separator);
-  background: var(--bg); font-size: 14px; color: var(--label); resize: none; outline: none; min-height: 80px;
+  width: 100%; padding: 12px 14px; border-radius: 14px;
+  border: 1.5px solid var(--separator);
+  background: var(--bg-inset);
+  font-family: var(--font); font-size: 14px; color: var(--label);
+  resize: none; outline: none; line-height: 1.5; min-height: 80px;
+  transition: border-color 0.2s, background 0.3s ease;
 }
-.comment-input:focus { border-color: var(--blue); background: white; }
+.comment-input:focus { border-color: var(--blue); background: var(--surface); }
+.comment-input::placeholder { color: var(--label3); }
+
+.comment-actions { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+
+.debate-btn {
+  padding: 9px 14px;
+  background: transparent;
+  border: 1.5px solid var(--separator);
+  color: var(--label2);
+  border-radius: var(--radius-btn);
+  font-family: var(--font);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 5px;
+  transition: all 0.2s;
+}
+.debate-btn:hover { border-color: var(--purple); color: var(--purple); }
 
 .comment-send {
-  align-self: flex-end; padding: 10px 20px; background: var(--blue); color: white;
-  border: none; border-radius: var(--radius-btn); font-size: 14px; font-weight: 600; cursor: pointer;
+  padding: 10px 20px; background: var(--blue); color: white;
+  border: none; border-radius: var(--radius-btn);
+  font-family: var(--font); font-size: 14px; font-weight: 600; cursor: pointer;
+  display: flex; align-items: center; gap: 6px;
+  transition: all 0.2s;
 }
+.comment-send:hover { background: #0066DD; transform: scale(1.02); }
+.comment-send:active { transform: scale(0.97); }
+.comment-send:disabled { background: var(--label3); cursor: not-allowed; transform: none; }
 
+/* Thread */
 .thread { display: flex; flex-direction: column; gap: 10px; }
 .bubble { display: flex; gap: 10px; align-items: flex-start; }
 .bubble.user { flex-direction: row-reverse; }
-.bubble-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
-.bubble.user .bubble-avatar { background: var(--blue); color: white; }
-.bubble.ai .bubble-avatar { background: linear-gradient(135deg, #5856D6, #AF52DE); color: white; }
+
+.bubble-avatar {
+  width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700;
+}
+.bubble.user .bubble-avatar { background: var(--blue); color: white; font-size: 11px; }
+.bubble.ai .bubble-avatar { background: linear-gradient(135deg, #5856D6, #AF52DE); color: white; font-size: 12px; }
+.bubble.ai.optimist .bubble-avatar { background: linear-gradient(135deg, #34C759, #32ADE6); }
+.bubble.ai.skeptic .bubble-avatar { background: linear-gradient(135deg, #FF3B30, #FF9500); }
+
 .bubble-content { max-width: calc(100% - 48px); }
-.bubble-name { font-size: 11px; font-weight: 600; color: var(--label3); margin-bottom: 4px; }
+.bubble-name { font-size: 11px; font-weight: 600; color: var(--label3); margin-bottom: 4px; letter-spacing: 0.02em; }
 .bubble.user .bubble-name { text-align: right; }
+
 .bubble-text { padding: 10px 13px; border-radius: 16px; font-size: 14px; line-height: 1.55; }
 .bubble.user .bubble-text { background: var(--blue); color: white; border-bottom-right-radius: 4px; }
-.bubble.ai .bubble-text { background: var(--bg); color: var(--label); border-bottom-left-radius: 4px; }
+.bubble.ai .bubble-text { background: var(--bg-inset); color: var(--label); border-bottom-left-radius: 4px; }
+.bubble.ai.optimist .bubble-text { background: #EAFBF0; }
+.bubble.ai.skeptic .bubble-text { background: #FFF0EE; }
+html[data-theme="dark"] .bubble.ai.optimist .bubble-text { background: #0F2A1A; color: var(--label); }
+html[data-theme="dark"] .bubble.ai.skeptic .bubble-text { background: #2A140F; color: var(--label); }
+
 .bubble-time { font-size: 10px; color: var(--label3); margin-top: 4px; }
 .bubble.user .bubble-time { text-align: right; }
 
 .thinking-dots { display: flex; gap: 4px; align-items: center; padding: 4px 2px; }
-.thinking-dots span { width: 6px; height: 6px; background: var(--label3); border-radius: 50%; animation: tdot 1.2s infinite; }
+.thinking-dots span { width: 6px; height: 6px; background: var(--label3); border-radius: 50%; animation: tdot 1.2s ease-in-out infinite; }
 .thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
 .thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
 @keyframes tdot { 0%,80%,100% { transform: scale(0.6); opacity:0.4; } 40% { transform: scale(1); opacity:1; } }
 
-.load-trigger { height: 60px; display: flex; align-items: center; justify-content: center; color: var(--label3); font-size: 13px; }
-.load-spinner { width: 28px; height: 28px; border: 2.5px solid var(--separator); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.8s linear infinite; display: none; }
+/* Fossil callout */
+.fossil-banner {
+  background: linear-gradient(135deg, #FFF8E1, #FFF0D9);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 12.5px;
+  color: #8A5A00;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  line-height: 1.5;
+}
+html[data-theme="dark"] .fossil-banner { background: #2A220A; color: #E0B040; }
+
+/* Sound toggle per card removed — global ambient handled by nav icon */
+
+.card-divider { height: 1px; background: var(--separator); margin: 0 16px 14px; transition: background 0.3s ease; }
+
+.load-trigger { height: 60px; display: flex; align-items: center; justify-content: center; }
+.load-spinner {
+  width: 28px; height: 28px;
+  border: 2.5px solid var(--separator);
+  border-top-color: var(--blue);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: none;
+}
 .load-spinner.visible { display: block; }
+
+/* ── SKELETON ── */
+.skeleton-card { background: var(--surface); border-radius: var(--radius-card); padding: 16px; box-shadow: var(--shadow-card); }
+.skel { background: linear-gradient(90deg, var(--skel-base) 25%, var(--skel-shine) 50%, var(--skel-base) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 8px; }
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+.skel-tag { height: 22px; width: 80px; margin-bottom: 12px; border-radius: 100px; }
+.skel-title { height: 20px; width: 90%; margin-bottom: 8px; }
+.skel-title2 { height: 20px; width: 65%; margin-bottom: 14px; }
+.skel-body { height: 14px; width: 100%; margin-bottom: 6px; }
+.skel-body2 { height: 14px; width: 80%; margin-bottom: 6px; }
+.skel-body3 { height: 14px; width: 70%; }
+
+/* ── EMPTY / ERROR ── */
+.state-card { background: var(--surface); border-radius: var(--radius-card); padding: 40px 24px; text-align: center; box-shadow: var(--shadow-card); }
+.state-icon { font-size: 44px; margin-bottom: 12px; }
+.state-title { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+.state-body { font-size: 14px; color: var(--label3); line-height: 1.5; }
+.state-btn { margin-top: 16px; padding: 10px 24px; background: var(--blue); color: white; border: none; border-radius: var(--radius-btn); font-family: var(--font); font-size: 14px; font-weight: 600; cursor: pointer; }
+
+/* ── TAG COLORS (light) ── */
+.tag-tech     { background: #EBF4FF; color: #007AFF; }
+.tag-science  { background: #F0F0FF; color: #5856D6; }
+.tag-world    { background: #FFF0EB; color: #FF6B35; }
+.tag-business { background: #F0FFF4; color: #34C759; }
+.tag-health   { background: #FFF5F5; color: #FF3B30; }
+.tag-space    { background: #1A1A2E; color: #AF52DE; }
+.tag-climate  { background: #F0FFF4; color: #30B041; }
+
+html[data-theme="dark"] .tag-tech     { background: #0A2540; color: #5AB3FF; }
+html[data-theme="dark"] .tag-science  { background: #1F1A40; color: #9D9AFF; }
+html[data-theme="dark"] .tag-world    { background: #3A1F12; color: #FF9466; }
+html[data-theme="dark"] .tag-business { background: #0F2A1A; color: #5FE085; }
+html[data-theme="dark"] .tag-health   { background: #2A140F; color: #FF7A70; }
+html[data-theme="dark"] .tag-space    { background: #1A1A2E; color: #D49AFF; }
+html[data-theme="dark"] .tag-climate  { background: #0F2A1A; color: #5FE085; }
+
+/* Reading DNA badge */
+.dna-badge {
+  position: fixed;
+  bottom: 18px;
+  right: 18px;
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  box-shadow: var(--shadow-raised);
+  cursor: pointer;
+  z-index: 90;
+  border: 2px solid var(--surface);
+  transition: transform 0.3s;
+}
+.dna-badge:hover { transform: scale(1.1) rotate(15deg); }
+
+.dna-panel {
+  position: fixed;
+  bottom: 76px;
+  right: 18px;
+  width: 240px;
+  background: var(--surface);
+  border-radius: 18px;
+  box-shadow: var(--shadow-raised);
+  padding: 16px;
+  z-index: 91;
+  display: none;
+  font-size: 12.5px;
+  color: var(--label2);
+  line-height: 1.6;
+}
+.dna-panel.visible { display: block; animation: cardIn 0.25s ease both; }
+.dna-panel h4 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--label3); margin-bottom: 8px; }
+.dna-bars { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+.dna-bar-row { display: flex; align-items: center; gap: 6px; }
+.dna-bar-label { font-size: 10.5px; width: 56px; flex-shrink: 0; color: var(--label3); }
+.dna-bar-track { flex: 1; height: 6px; background: var(--bg-inset); border-radius: 3px; overflow: hidden; }
+.dna-bar-fill { height: 100%; border-radius: 3px; transition: width 0.6s ease; }
+
+@media (max-width: 500px) {
+  .card-title { font-size: 16px; }
+  .feed { padding: 12px 12px 40px; gap: 12px; }
+  .dna-panel { width: calc(100vw - 36px); right: 18px; }
+}
 </style>
 </head>
 <body>
@@ -229,7 +556,14 @@ body {
 <nav class="nav">
   <div class="nav-inner">
     <div class="nav-logo"><span class="dot"></span>Pulse</div>
-    <button class="refresh-btn" id="refresh-btn" onclick="refreshFeed()">↻</button>
+    <div class="nav-right">
+      <button class="icon-btn" id="sound-btn" title="Ambient sound" onclick="toggleSound()">🔇</button>
+      <button class="theme-toggle" id="theme-toggle-btn" title="Toggle theme" onclick="toggleTheme()">
+        <span class="icon-sun">☀️</span>
+        <span class="icon-moon">🌙</span>
+      </button>
+      <button class="icon-btn" id="refresh-btn" title="Refresh feed" onclick="refreshFeed()">↻</button>
+    </div>
   </div>
 </nav>
 
@@ -240,7 +574,14 @@ body {
     <button class="chip" data-topic="Science">Science</button>
     <button class="chip" data-topic="World">World</button>
     <button class="chip" data-topic="Business">Business</button>
+    <button class="chip" data-topic="Health">Health</button>
+    <button class="chip" data-topic="Space">Space</button>
+    <button class="chip" data-topic="Climate">Climate</button>
   </div>
+  <div class="compression-bar">
+    <button class="compression-toggle" onclick="toggleCompression()">⚡ 60-Second Mode</button>
+  </div>
+  <div class="compression-panel" id="compression-panel"></div>
 </div>
 
 <div class="feed" id="feed"></div>
@@ -248,171 +589,914 @@ body {
   <div class="load-spinner" id="load-spinner"></div>
 </div>
 
+<div class="dna-badge" id="dna-badge" onclick="toggleDnaPanel()" title="Your Reading DNA"></div>
+<div class="dna-panel" id="dna-panel">
+  <h4>Your Reading DNA</h4>
+  <div id="dna-content"></div>
+</div>
+
 <script>
+// ════════════════════════════════════════════════════════════════════════════
+// PULSE — News You Actually Think About
+// All config, state, and feature logic
+// ════════════════════════════════════════════════════════════════════════════
+
+// ── CONFIG ────────────────────────────────────────────────────────────────────
+// NewsData.io — free tier, 200 credits/day, CORS-friendly. Get your own key at newsdata.io
+const NEWSDATA_KEY = 'pub_87199f9f7c204d5faec86ed2bed0cd2c3c73';
+
+const TOPIC_CATEGORY = {
+  Tech: 'technology', Science: 'science', World: 'world',
+  Business: 'business', Health: 'health', Space: 'science', Climate: 'environment',
+};
+
+const TAG_ICON = {
+  Tech: '⚡', Science: '🔬', World: '🌍', Business: '📈',
+  Health: '❤️', Space: '🚀', Climate: '🌿'
+};
+
+// ── STATE ──────────────────────────────────────────────────────────────────────
 let allArticles = [];
 let displayedCount = 0;
 let isLoading = false;
 let activeFilter = 'all';
+let cardCounter = 0; // tracks position for inserting counter/silent cards
 const PAGE_SIZE = 5;
 
-const STORAGE_KEY = 'pulse_comments_v3';
+const COMMENTS_KEY = 'pulse_comments_v4';
+const READING_DNA_KEY = 'pulse_reading_dna_v1';
+const THEME_KEY = 'pulse_theme_v1';
 
-function getStorage() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch { return {}; }
+// ════════════════════════════════════════════════════════════════════════════
+// FEATURE 1: THEME TOGGLE (light/dark)
+// ════════════════════════════════════════════════════════════════════════════
+function initTheme() {
+  const saved = localStorage.getItem(THEME_KEY);
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const theme = saved || (prefersDark ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', theme);
 }
 
-function saveComment(articleId, userText, aiText) {
-  const store = getStorage();
-  store[articleId] = { user: userText, ai: aiText, time: new Date().toISOString() };
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem(THEME_KEY, next);
 }
 
-function generateLocalMockFeed() {
-  const categories = ['Tech', 'Science', 'World', 'Business'];
-  const dataPool = [
-    { topic: 'Tech', title: "Neural Mesh Architecture Eliminates Data Center Latency", body: "Engineers finalized an edge-intelligence framework capable of hosting full foundational arrays directly within lightweight phone processing units." },
-    { topic: 'Science', title: "Ambient Superconductivity Validated in Crystalline Synthetics", body: "Research teams confirmed uniform magnetic flux pinning patterns within processed chemical compounds running at standard indoor ambient temperatures." },
-    { topic: 'World', title: "Global Logistics Corridors Pivot Toward Isolated Ledgers", body: "International cargo transport lanes completed standard baseline testing transitions to route primary tracking data over decentralized nodes." },
-    { topic: 'Business', title: "Sovereign Framework Restructures Automated Market Makers", body: "Financial authorities approved continuous system guidelines to settle asset transfers without reliance on central clearings." }
-  ];
+// ════════════════════════════════════════════════════════════════════════════
+// FEATURE 2: AMBIENT SOUND PER TOPIC (Web Audio API, no libraries)
+// ════════════════════════════════════════════════════════════════════════════
+let audioCtx = null;
+let currentOscillators = [];
+let soundEnabled = false;
 
-  let list = [];
-  for (let i = 0; i < 20; i++) {
-    const baseline = dataPool[i % dataPool.length];
-    const itemID = `art-${Date.now()}-${i}`;
-    list.push({
-      id: itemID,
-      topic: baseline.topic,
-      title: `${baseline.title}`,
-      body: baseline.body,
-      source: "Pulse Intelligence Desk",
-      publishedAt: new Date().toISOString(),
-      question: "How do you think this structural shift impacts operations in your immediate professional workspace?"
-    });
+const TOPIC_SOUND = {
+  Tech:     { freq: 220, type: 'sine' },
+  Science:  { freq: 330, type: 'sine' },
+  World:    { freq: 110, type: 'triangle' },
+  Business: { freq: 196, type: 'sine' },
+  Health:   { freq: 261, type: 'sine' },
+  Space:    { freq: 80,  type: 'sine' },
+  Climate:  { freq: 174, type: 'triangle' },
+};
+
+function toggleSound() {
+  soundEnabled = !soundEnabled;
+  const btn = document.getElementById('sound-btn');
+  btn.textContent = soundEnabled ? '🔊' : '🔇';
+  if (!soundEnabled) stopAmbient();
+}
+
+function stopAmbient() {
+  currentOscillators.forEach(o => { try { o.stop(); } catch {} });
+  currentOscillators = [];
+}
+
+function playAmbientForTopic(topic) {
+  if (!soundEnabled) return;
+  if (!audioCtx) {
+    try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+    catch { return; }
   }
-  return list;
+  stopAmbient();
+  const cfg = TOPIC_SOUND[topic] || TOPIC_SOUND.Tech;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = cfg.type;
+  osc.frequency.setValueAtTime(cfg.freq, audioCtx.currentTime);
+  gain.gain.setValueAtTime(0, audioCtx.currentTime);
+  gain.gain.linearRampToValueAtTime(0.025, audioCtx.currentTime + 0.5);
+  gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 2.2);
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.start();
+  osc.stop(audioCtx.currentTime + 2.3);
+  currentOscillators.push(osc);
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// FEATURE 3: READING DNA — local fingerprint of engagement, no login
+// ════════════════════════════════════════════════════════════════════════════
+function getReadingDna() {
+  try { return JSON.parse(localStorage.getItem(READING_DNA_KEY) || '{}'); }
+  catch { return {}; }
+}
+
+function recordDnaEngagement(topic) {
+  const dna = getReadingDna();
+  dna[topic] = (dna[topic] || 0) + 1;
+  localStorage.setItem(READING_DNA_KEY, JSON.stringify(dna));
+  renderDnaBadge();
+}
+
+const DNA_COLORS = {
+  Tech: '#007AFF', Science: '#5856D6', World: '#FF6B35',
+  Business: '#34C759', Health: '#FF3B30', Space: '#AF52DE', Climate: '#30B041'
+};
+
+function renderDnaBadge() {
+  const dna = getReadingDna();
+  const badge = document.getElementById('dna-badge');
+  const topics = Object.keys(dna);
+  if (topics.length === 0) {
+    badge.style.background = 'linear-gradient(135deg, #C2C2D1, #8E8E93)';
+    return;
+  }
+  const total = Object.values(dna).reduce((a, b) => a + b, 0);
+  let gradientStops = [];
+  let acc = 0;
+  topics.sort((a, b) => dna[b] - dna[a]).forEach(t => {
+    const pct = (dna[t] / total) * 100;
+    const color = DNA_COLORS[t] || '#8E8E93';
+    gradientStops.push(`${color} ${acc}% ${acc + pct}%`);
+    acc += pct;
+  });
+  badge.style.background = `conic-gradient(${gradientStops.join(', ')})`;
+}
+
+function toggleDnaPanel() {
+  const panel = document.getElementById('dna-panel');
+  const content = document.getElementById('dna-content');
+  const isVisible = panel.classList.contains('visible');
+
+  if (!isVisible) {
+    const dna = getReadingDna();
+    const total = Object.values(dna).reduce((a, b) => a + b, 0);
+    if (total === 0) {
+      content.innerHTML = `<div style="color:var(--label3);font-style:italic;">Engage with a few stories and your reading pattern will form here.</div>`;
+    } else {
+      const sorted = Object.entries(dna).sort((a, b) => b[1] - a[1]);
+      const top = sorted[0][0];
+      let bars = sorted.map(([topic, count]) => {
+        const pct = Math.round((count / total) * 100);
+        const color = DNA_COLORS[topic] || '#8E8E93';
+        return `<div class="dna-bar-row">
+          <span class="dna-bar-label">${topic}</span>
+          <div class="dna-bar-track"><div class="dna-bar-fill" style="width:${pct}%;background:${color}"></div></div>
+        </div>`;
+      }).join('');
+      content.innerHTML = `<div style="margin-bottom:6px;">You lean <strong>${top}</strong> right now.</div><div class="dna-bars">${bars}</div>`;
+    }
+  }
+
+  panel.classList.toggle('visible');
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// FEATURE 4: BIAS MIRROR — silent stance tracking, weekly reveal
+// ════════════════════════════════════════════════════════════════════════════
+const BIAS_KEY = 'pulse_bias_log_v1';
+
+function classifyStance(userComment) {
+  const text = userComment.toLowerCase();
+  const skepticWords = /worried|danger|risk|concern|bad|harmful|threat|scary|against|distrust|problem|wrong|fail/;
+  const optimistWords = /great|good|excited|hope|positive|benefit|opportunity|love|amazing|support|agree|exciting/;
+  if (skepticWords.test(text) && !optimistWords.test(text)) return 'skeptic';
+  if (optimistWords.test(text) && !skepticWords.test(text)) return 'optimist';
+  return 'neutral';
+}
+
+function logBiasStance(topic, stance) {
+  if (stance === 'neutral') return;
+  let log = [];
+  try { log = JSON.parse(localStorage.getItem(BIAS_KEY) || '[]'); } catch {}
+  log.push({ topic, stance, time: Date.now() });
+  // Keep last 60 days only
+  const cutoff = Date.now() - (60 * 86400000);
+  log = log.filter(e => e.time > cutoff);
+  localStorage.setItem(BIAS_KEY, JSON.stringify(log));
+}
+
+function checkBiasMirror() {
+  let log = [];
+  try { log = JSON.parse(localStorage.getItem(BIAS_KEY) || '[]'); } catch {}
+  const weekAgo = Date.now() - (7 * 86400000);
+  const recent = log.filter(e => e.time > weekAgo);
+  if (recent.length < 6) return null;
+
+  const counts = { skeptic: 0, optimist: 0 };
+  const topicCounts = {};
+  recent.forEach(e => {
+    counts[e.stance]++;
+    topicCounts[e.topic] = (topicCounts[e.topic] || 0) + 1;
+  });
+
+  const dominant = counts.skeptic > counts.optimist ? 'skeptic' : 'optimist';
+  const dominantCount = Math.max(counts.skeptic, counts.optimist);
+  const total = counts.skeptic + counts.optimist;
+  if (total === 0 || dominantCount / total < 0.7) return null;
+
+  const topTopic = Object.entries(topicCounts).sort((a, b) => b[1] - a[1])[0][0];
+  return { dominant, count: dominantCount, total, topic: topTopic };
+}
+
+function renderBiasMirrorBanner() {
+  const result = checkBiasMirror();
+  if (!result) return;
+  const feed = document.getElementById('feed');
+  const banner = document.createElement('div');
+  banner.className = 'card';
+  banner.style.background = 'linear-gradient(135deg, #2C2C2E, #1C1C1E)';
+  banner.style.color = '#fff';
+  banner.innerHTML = `
+    <div style="padding:18px;">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:#AF52DE;margin-bottom:8px;">🪞 Bias Mirror</div>
+      <div style="font-size:14px;line-height:1.6;">
+        You've leaned <strong>${result.dominant}</strong> on ${result.count} of ${result.total} ${result.topic} stories this week.
+        Worth reading something that pushes back on that lean today.
+      </div>
+    </div>
+  `;
+  feed.prepend(banner);
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// FEATURE 5: COMMENT FOSSILS — AI revisits old takes after 30 days
+// ════════════════════════════════════════════════════════════════════════════
+function checkFossil(commentEntry) {
+  if (!commentEntry || !commentEntry.time) return false;
+  const ageMs = Date.now() - new Date(commentEntry.time).getTime();
+  const days = ageMs / 86400000;
+  return days >= 30 && !commentEntry.fossilShown;
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// FEATURE 6: CONFIDENCE DECAY — visual staleness overlay
+// ════════════════════════════════════════════════════════════════════════════
+function applyDecayOverlay(el, publishedAt) {
+  if (!publishedAt) return;
+  const ageHours = (Date.now() - new Date(publishedAt).getTime()) / 3600000;
+  // Decay starts after 12h, maxes around 72h
+  const decayPct = Math.max(0, Math.min(1, (ageHours - 12) / 60));
+  if (decayPct <= 0) return;
+  el.style.opacity = String(1 - decayPct * 0.35);
+  el.style.filter = `saturate(${1 - decayPct * 0.4})`;
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// FEATURE 7: READING PACE METRIC — track scroll/dwell, mark skim vs read
+// ════════════════════════════════════════════════════════════════════════════
+const cardViewTimers = {};
+
+function startPaceTracking(cardEl, articleId) {
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        cardViewTimers[articleId] = Date.now();
+      } else if (cardViewTimers[articleId]) {
+        const dwell = Date.now() - cardViewTimers[articleId];
+        markReadStatus(cardEl, dwell);
+        delete cardViewTimers[articleId];
+      }
+    });
+  }, { threshold: 0.6 });
+  obs.observe(cardEl);
+}
+
+function markReadStatus(cardEl, dwellMs) {
+  const body = cardEl.querySelector('.card-body');
+  if (!body) return;
+  if (dwellMs > 3500) {
+    cardEl.style.borderLeft = '3px solid var(--green)';
+  } else if (dwellMs > 800) {
+    cardEl.style.borderLeft = '3px solid var(--orange)';
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// COMMENT STORAGE
+// ════════════════════════════════════════════════════════════════════════════
+function getCommentStore() {
+  try { return JSON.parse(localStorage.getItem(COMMENTS_KEY) || '{}'); }
+  catch { return {}; }
+}
+
+function saveComment(articleId, userText, aiText, extra = {}) {
+  const store = getCommentStore();
+  store[articleId] = { user: userText, ai: aiText, time: new Date().toISOString(), ...extra };
+  localStorage.setItem(COMMENTS_KEY, JSON.stringify(store));
+}
+
+function getComment(articleId) {
+  return getCommentStore()[articleId] || null;
+}
+
+function markFossilShown(articleId) {
+  const store = getCommentStore();
+  if (store[articleId]) {
+    store[articleId].fossilShown = true;
+    localStorage.setItem(COMMENTS_KEY, JSON.stringify(store));
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// NEWS FETCHING
+// ════════════════════════════════════════════════════════════════════════════
+function classifyTopic(title, desc) {
+  const text = (title + ' ' + (desc || '')).toLowerCase();
+  if (/space|nasa|spacex|rocket|satellite|asteroid|mars|moon|orbit/.test(text)) return 'Space';
+  if (/climate|carbon|emission|renewable|solar|wind energy|glacier|temperature/.test(text)) return 'Climate';
+  if (/health|hospital|vaccine|disease|cancer|mental health|medicine|drug/.test(text)) return 'Health';
+  if (/\bai\b|artificial intelligence|machine learning|openai|deepmind|semiconductor|software/.test(text)) return 'Tech';
+  if (/science|research|study finds|discovery|biology|physics|chemistry|genome/.test(text)) return 'Science';
+  if (/market|stock|economy|gdp|inflation|startup|ipo|revenue|investment|crypto/.test(text)) return 'Business';
+  return 'World';
+}
+
+function slugify(title) {
+  return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60)
+    + '-' + Math.random().toString(36).slice(2, 6);
+}
+
+function generateQuestion(title, description) {
+  const text = (title + ' ' + (description || '')).toLowerCase();
+  if (/ai|artificial intelligence|machine learning|robot/.test(text))
+    return 'Will AI developments like this help or threaten people in your field?';
+  if (/climate|emission|carbon|renewable|fossil/.test(text))
+    return 'Does your country feel the effects of this climate issue yet?';
+  if (/war|conflict|attack|missile|troops|military/.test(text))
+    return 'How do conflicts like this reshape global power dynamics?';
+  if (/health|disease|virus|cancer|vaccine|hospital/.test(text))
+    return 'How prepared do you think your country is for health challenges like this?';
+  if (/space|rocket|nasa|satellite|moon|mars/.test(text))
+    return 'Should governments prioritize space exploration over other pressing issues?';
+  if (/economy|inflation|recession|gdp|market|stock/.test(text))
+    return 'How are economic shifts like this affecting your daily life?';
+  if (/election|president|government|parliament|democracy|vote/.test(text))
+    return 'What does this political development signal for global democracy?';
+  if (/tech|software|app|startup|data|privacy|cyber/.test(text))
+    return 'How much do developments like this shape your digital life?';
+  if (/science|discovery|research|study|experiment/.test(text))
+    return 'How might this scientific finding change the way we live?';
+  if (/energy|oil|gas|nuclear|solar|power/.test(text))
+    return 'Is your country moving fast enough on energy transition?';
+  return 'What does this story reveal about where the world is heading?';
+}
+
+async function fetchNews(topics, existingIds = []) {
+  const topic = topics[Math.floor(Math.random() * topics.length)];
+  const category = TOPIC_CATEGORY[topic] || 'world';
+  const url = `https://newsdata.io/api/1/latest?apikey=${NEWSDATA_KEY}&language=en&category=${category}&size=10`;
+
+  let res;
+  try { res = await fetch(url); }
+  catch (e) { throw new Error('Network error: ' + e.message); }
+
+  if (!res.ok) { const txt = await res.text(); throw new Error(`NewsData ${res.status}: ${txt}`); }
+
+  const data = await res.json();
+  if (data.status !== 'success') throw new Error('NewsData: ' + JSON.stringify(data));
+
+  const raw = (data.results || []).filter(a => a.title && a.description && a.description.length > 40);
+  if (raw.length === 0) throw new Error('No articles returned');
+
+  const batch = raw.slice(0, 6);
+  return batch.map(a => ({
+    id: slugify(a.title),
+    topic: classifyTopic(a.title, a.description),
+    title: a.title,
+    body: a.description,
+    question: generateQuestion(a.title, a.description),
+    source: a.source_name || a.source_id || 'Global News',
+    publishedAt: a.pubDate || new Date().toISOString(),
+    url: a.link || '#',
+    imageUrl: a.image_url || null,
+  }));
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// AI RESPONSES (real Claude API calls)
+// ════════════════════════════════════════════════════════════════════════════
+async function callClaude(systemPrompt, userContent, maxTokens = 280) {
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-6',
+      max_tokens: maxTokens,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: userContent }]
+    })
+  });
+  if (!res.ok) throw new Error(`Claude API error ${res.status}`);
+  const data = await res.json();
+  return data.content?.[0]?.text?.trim() || '';
 }
 
 async function getAIResponse(article, userComment) {
-  // Pure local client-side processing engine to completely bypass CORS blockages on GitHub Pages
-  await new Promise(res => setTimeout(res, 1200));
-  
-  const strategicReplies = [
-    `That directly hits the central issue. If we look closely at deployment parameters, the true bottleneck isn't standard engineering restrictions—it is organizational friction. Infrastructure panels are systemically slow, while this framework moves exponentially.`,
-    `An excellent framework point. When these technical paradigms reach scale, the downstream execution cost falls to near zero, meaning historical monetization systems will likely have to adapt completely.`,
-    `That is the exact micro friction layer. While localized optimization numbers look spectacular on paper, systemic risks rise because underlying network dependencies remain unhedged.`
-  ];
-  return strategicReplies[Math.floor(Math.random() * strategicReplies.length)];
+  const system = `You are Pulse AI — sharp, curious, globally-minded. A reader shared their take on a news story.
+1. Briefly acknowledge their view (1 sentence, no sycophancy)
+2. Add 2-3 specific facts or angles they likely don't know
+3. Connect it to a broader trend
+4. End with one sharp forward-looking thought
+Under 150 words. Flowing prose, no bullet points. Never start with "Great point".`;
+  const content = `Story: "${article.title}"\nContext: ${article.body}\nQuestion: "${article.question}"\nReader's response: "${userComment}"`;
+  return await callClaude(system, content, 280);
 }
 
-function renderCard(article, index) {
-  const existing = getStorage()[article.id];
+// FEATURE 8: TWO-AI DEBATE — optimist vs skeptic
+async function getDebateResponses(article, userComment) {
+  const optimistSystem = `You are "Optimist AI" in a debate. A reader shared a take on a news story. Respond in 2-3 sentences arguing the hopeful, opportunity-focused interpretation of this story. Be specific, not generic. Address the reader's comment directly.`;
+  const skepticSystem = `You are "Skeptic AI" in a debate. A reader shared a take on a news story. Respond in 2-3 sentences arguing the cautious, risk-focused interpretation of this story. Be specific, not generic. Address the reader's comment directly, and where natural, gently push back on what Optimist AI might say.`;
+  const content = `Story: "${article.title}"\nContext: ${article.body}\nReader said: "${userComment}"`;
+
+  const [optimist, skeptic] = await Promise.all([
+    callClaude(optimistSystem, content, 150),
+    callClaude(skepticSystem, content, 150)
+  ]);
+  return { optimist, skeptic };
+}
+
+// FEATURE 9: FOSSIL REVISIT
+async function getFossilRevisit(article, oldComment) {
+  const system = `You are Pulse AI. A reader commented on a news story over 30 days ago. Revisit their take now: gently note what's happened since (use general world knowledge, acknowledge uncertainty if you don't know specifics), and ask if their view changed. Under 90 words, conversational, not preachy.`;
+  const content = `Story: "${article.title}"\nTheir take from a month ago: "${oldComment}"`;
+  return await callClaude(system, content, 180);
+}
+
+// FEATURE 10: COUNTER-CARD — AI generates opposing view of a real story
+async function generateCounterCard(sourceArticle) {
+  const system = `You are a counter-argument generator for a news app. Given a news story, write the strongest good-faith OPPOSING perspective to the obvious reading of it. Return ONLY valid JSON, no markdown: {"title":"A punchy counter-headline","body":"2-3 sentences making the strongest opposing case, factual and fair, not strawmanning.","question":"A question that challenges the reader's assumption."}`;
+  const content = `Original story: "${sourceArticle.title}"\nContext: ${sourceArticle.body}`;
+  try {
+    const text = await callClaude(system, content, 300);
+    const clean = text.replace(/```json|```/gi, '').trim();
+    const start = clean.indexOf('{'); const end = clean.lastIndexOf('}');
+    if (start === -1 || end === -1) return null;
+    const parsed = JSON.parse(clean.slice(start, end + 1));
+    return {
+      id: 'counter-' + sourceArticle.id,
+      topic: sourceArticle.topic,
+      title: parsed.title,
+      body: parsed.body,
+      question: parsed.question,
+      isCounter: true,
+      sourceTitle: sourceArticle.title
+    };
+  } catch { return null; }
+}
+
+// FEATURE 12: TIME-SHIFTED REFRAME (used inside compression / on demand)
+async function getTimeShiftedVersion(article) {
+  const system = `Rewrite this modern headline and one-sentence summary as if it were written by a journalist 10 years ago — same core event, but period-appropriate language, assumptions, and framing. Return ONLY valid JSON: {"title":"...", "body":"..."}`;
+  const content = `Modern headline: "${article.title}"\nModern summary: ${article.body}`;
+  try {
+    const text = await callClaude(system, content, 200);
+    const clean = text.replace(/```json|```/gi, '').trim();
+    const start = clean.indexOf('{'); const end = clean.lastIndexOf('}');
+    if (start === -1 || end === -1) return null;
+    return JSON.parse(clean.slice(start, end + 1));
+  } catch { return null; }
+}
+
+// FEATURE 11 (part of compression mode): meta-summary of all visible cards
+async function getCompressionSummary(articles) {
+  const system = `You are Pulse AI's "60-Second Mode." Given several news headlines, write ONE tight paragraph (max 90 words) that synthesizes what's happening across all of them — find the thread connecting them if one exists, otherwise just compress efficiently. No bullet points, no headers, flowing prose.`;
+  const content = articles.map(a => `- [${a.topic}] ${a.title}: ${a.body}`).join('\n');
+  return await callClaude(system, content, 220);
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// RENDERING
+// ════════════════════════════════════════════════════════════════════════════
+function timeAgo(iso) {
+  if (!iso) return 'just now';
+  const diff = (Date.now() - new Date(iso)) / 1000;
+  if (diff < 60) return 'just now';
+  if (diff < 3600) return `${Math.floor(diff/60)}m ago`;
+  if (diff < 86400) return `${Math.floor(diff/3600)}h ago`;
+  return `${Math.floor(diff/86400)}d ago`;
+}
+
+function escHtml(s) {
+  return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function renderCard(article, indexInBatch) {
+  const icon = TAG_ICON[article.topic] || '📰';
+  const tagCls = 'tag-' + article.topic.toLowerCase();
+  const existing = getComment(article.id);
   const card = document.createElement('div');
   card.className = 'card';
   card.id = `card-${article.id}`;
+  card.style.animationDelay = `${(indexInBatch % PAGE_SIZE) * 60}ms`;
 
-  const commentHTML = existing 
-    ? buildThreadHTML(existing.user, existing.ai, existing.time)
+  // FEATURE: Counter-card styling
+  if (article.isCounter) card.classList.add('counter-card');
+
+  const commentHTML = existing
+    ? buildThreadHTML(article, existing)
     : buildInputHTML(article.id);
 
+  // FEATURE: Image with fallback
+  const imageHTML = article.imageUrl
+    ? `<div class="card-image-wrap">
+         <img class="card-image" src="${article.imageUrl}" alt="" loading="lazy"
+              onload="this.classList.add('loaded')"
+              onerror="this.parentElement.innerHTML='<div class=card-image-fallback>${icon}</div>'">
+       </div>`
+    : `<div class="card-image-wrap"><div class="card-image-fallback">${icon}</div></div>`;
+
+  const counterLabel = article.isCounter
+    ? `<div style="font-size:11px;color:var(--orange);font-weight:600;margin-bottom:6px;">↺ COUNTER-TAKE on "${escHtml(article.sourceTitle).slice(0,50)}..."</div>`
+    : '';
+
   card.innerHTML = `
+    ${imageHTML}
     <div class="card-top">
       <div class="card-meta">
-        <span class="card-tag tag-${article.topic.toLowerCase()}">⚡ ${article.topic}</span>
-        <span class="card-time">Just now</span>
+        <span class="card-tag ${article.isCounter ? 'tag-counter' : tagCls}">${article.isCounter ? '↺' : icon} ${article.isCounter ? 'Counter-Take' : article.topic}</span>
+        <span class="card-time">${timeAgo(article.publishedAt)}</span>
       </div>
-      <div class="card-title">${article.title}</div>
-      <div class="card-body">${article.body}</div>
-      <div class="card-source"><span class="source-dot"></span><span>${article.source}</span></div>
+      ${counterLabel}
+      <div class="card-title">${escHtml(article.title)}</div>
+      <div class="card-body">${escHtml(article.body)}</div>
+      ${!article.isCounter ? `<div id="timeshift-${article.id}"></div>
+      <button class="debate-btn" style="margin-top:8px;font-size:11.5px;padding:6px 10px;" onclick="showTimeShift('${article.id}', event)">🕰️ See this headline 10 years ago</button>` : ''}
+      ${!article.isCounter ? `<div class="card-source">
+        <span class="source-dot"></span>
+        <span>${escHtml(article.source || 'Global News')}</span>
+        ${article.url && article.url !== '#' ? `<a href="${article.url}" target="_blank" rel="noopener">Read →</a>` : ''}
+      </div>` : ''}
     </div>
     <div class="card-question-wrap">
       <div class="card-question-label">Ask yourself</div>
-      <div class="card-question-text">${article.question}</div>
+      <div class="card-question-text">${escHtml(article.question)}</div>
     </div>
     <div class="card-divider"></div>
     <div class="comment-section" id="cs-${article.id}">${commentHTML}</div>
   `;
+
+  // Decay overlay on the title/body area
+  if (!article.isCounter) applyDecayOverlay(card.querySelector('.card-body'), article.publishedAt);
+
   return card;
 }
 
-function buildInputHTML(id) {
-  return `<div class="comment-input-wrap">
-    <textarea class="comment-input" id="ta-${id}" placeholder="Share your thoughts..." rows="3"></textarea>
-    <button class="comment-send" onclick="submitComment('${id}')">Send ↑</button>
-  </div>`;
-}
-
-function buildThreadHTML(userText, aiText, time) {
-  return `<div class="thread">
-    <div class="bubble user">
-      <div class="bubble-avatar">YOU</div>
-      <div class="bubble-content">
-        <div class="bubble-text">${userText}</div>
+function buildInputHTML(articleId) {
+  return `
+    <div class="comment-input-wrap">
+      <textarea class="comment-input" id="ta-${articleId}" placeholder="Share your thoughts…" rows="3"></textarea>
+      <div class="comment-actions">
+        <button class="debate-btn" onclick="submitComment('${articleId}', true)">⚔️ Get both sides</button>
+        <button class="comment-send" onclick="submitComment('${articleId}', false)">Send ↑</button>
       </div>
     </div>
-    <div class="bubble ai">
-      <div class="bubble-avatar">AI</div>
-      <div class="bubble-content">
-        <div class="bubble-text">${aiText}</div>
+  `;
+}
+
+function buildThreadHTML(article, entry) {
+  const t = entry.time ? new Date(entry.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+  let fossilHTML = '';
+
+  if (checkFossil(entry)) {
+    fossilHTML = `<div class="fossil-banner" id="fossil-${article.id}">
+      <span>🦴</span>
+      <span>You said this 30+ days ago. <a href="#" onclick="revealFossil('${article.id}', event)" style="color:#8A5A00;font-weight:600;">See what's changed →</a></span>
+    </div>`;
+  }
+
+  if (entry.debate) {
+    return `
+      ${fossilHTML}
+      <div class="thread">
+        <div class="bubble user">
+          <div class="bubble-avatar">YOU</div>
+          <div class="bubble-content"><div class="bubble-name">You</div><div class="bubble-text">${escHtml(entry.user)}</div><div class="bubble-time">${t}</div></div>
+        </div>
+        <div class="bubble ai optimist">
+          <div class="bubble-avatar">+</div>
+          <div class="bubble-content"><div class="bubble-name">Optimist AI</div><div class="bubble-text">${entry.optimist}</div></div>
+        </div>
+        <div class="bubble ai skeptic">
+          <div class="bubble-avatar">−</div>
+          <div class="bubble-content"><div class="bubble-name">Skeptic AI</div><div class="bubble-text">${entry.skeptic}</div></div>
+        </div>
+      </div>
+      <div id="fossil-reveal-${article.id}"></div>
+    `;
+  }
+
+  return `
+    ${fossilHTML}
+    <div class="thread">
+      <div class="bubble user">
+        <div class="bubble-avatar">YOU</div>
+        <div class="bubble-content"><div class="bubble-name">You</div><div class="bubble-text">${escHtml(entry.user)}</div><div class="bubble-time">${t}</div></div>
+      </div>
+      <div class="bubble ai">
+        <div class="bubble-avatar">AI</div>
+        <div class="bubble-content"><div class="bubble-name">Pulse AI</div><div class="bubble-text">${entry.ai}</div><div class="bubble-time">Just now</div></div>
       </div>
     </div>
-  </div>`;
+    <div id="fossil-reveal-${article.id}"></div>
+  `;
 }
 
-async function submitComment(id) {
-  const ta = document.getElementById(`ta-${id}`);
-  const cs = document.getElementById(`cs-${id}`);
-  const text = ta ? ta.value.trim() : '';
-  if (!text) return;
-
-  cs.innerHTML = `<div class="thread">
-    <div class="bubble user"><div class="bubble-avatar">YOU</div><div class="bubble-content"><div class="bubble-text">${text}</div></div></div>
-    <div class="bubble ai"><div class="bubble-avatar">AI</div><div class="bubble-content"><div class="bubble-text"><div class="thinking-dots"><span></span><span></span><span></span></div></div></div></div>
-  </div>`;
-
-  const article = allArticles.find(a => a.id === id);
-  const reply = await getAIResponse(article, text);
-  saveComment(id, text, reply);
-  cs.innerHTML = buildThreadHTML(text, reply, new Date().toISOString());
+function thinkingHTML(label = 'Pulse AI') {
+  return `<div class="thread"><div class="bubble ai"><div class="bubble-avatar">AI</div><div class="bubble-content"><div class="bubble-name">${label}</div><div class="bubble-text"><div class="thinking-dots"><span></span><span></span><span></span></div></div></div></div></div>`;
 }
 
+async function revealFossil(articleId, e) {
+  e.preventDefault();
+  const article = allArticles.find(a => a.id === articleId);
+  const entry = getComment(articleId);
+  const container = document.getElementById(`fossil-reveal-${articleId}`);
+  const banner = document.getElementById(`fossil-${articleId}`);
+  if (!article || !entry) return;
+
+  banner.innerHTML = `<span>🦴</span><span>Looking back...</span>`;
+  container.innerHTML = thinkingHTML('Pulse AI · Looking back');
+
+  try {
+    const revisit = await getFossilRevisit(article, entry.user);
+    container.innerHTML = `<div class="thread"><div class="bubble ai"><div class="bubble-avatar">⏳</div><div class="bubble-content"><div class="bubble-name">30 Days Later</div><div class="bubble-text">${revisit}</div></div></div></div>`;
+    markFossilShown(articleId);
+    banner.style.display = 'none';
+  } catch {
+    container.innerHTML = '';
+    banner.innerHTML = `<span>🦴</span><span>Couldn't look back right now. Try again later.</span>`;
+  }
+}
+
+// ── SUBMIT COMMENT (with optional debate mode) ───────────────────────────────
+async function submitComment(articleId, debateMode) {
+  const ta = document.getElementById(`ta-${articleId}`);
+  const cs = document.getElementById(`cs-${articleId}`);
+  const userText = ta ? ta.value.trim() : '';
+  if (!userText) {
+    if (ta) { ta.style.borderColor = 'var(--red)'; setTimeout(() => ta.style.borderColor = '', 1500); }
+    return;
+  }
+
+  const article = allArticles.find(a => a.id === articleId);
+  if (!article) return;
+
+  // Record DNA + bias silently
+  recordDnaEngagement(article.topic);
+  logBiasStance(article.topic, classifyStance(userText));
+
+  cs.innerHTML = `
+    <div class="thread">
+      <div class="bubble user"><div class="bubble-avatar">YOU</div><div class="bubble-content"><div class="bubble-name">You</div><div class="bubble-text">${escHtml(userText)}</div></div></div>
+    </div>
+    ${debateMode ? `
+      <div class="thread" style="margin-top:10px;">
+        <div class="bubble ai optimist"><div class="bubble-avatar">+</div><div class="bubble-content"><div class="bubble-name">Optimist AI</div><div class="bubble-text"><div class="thinking-dots"><span></span><span></span><span></span></div></div></div></div>
+        <div class="bubble ai skeptic"><div class="bubble-avatar">−</div><div class="bubble-content"><div class="bubble-name">Skeptic AI</div><div class="bubble-text"><div class="thinking-dots"><span></span><span></span><span></span></div></div></div></div>
+      </div>
+    ` : `
+      <div class="thread" style="margin-top:10px;">
+        <div class="bubble ai"><div class="bubble-avatar">AI</div><div class="bubble-content"><div class="bubble-name">Pulse AI</div><div class="bubble-text"><div class="thinking-dots"><span></span><span></span><span></span></div></div></div></div>
+      </div>
+    `}
+  `;
+
+  try {
+    if (debateMode) {
+      const { optimist, skeptic } = await getDebateResponses(article, userText);
+      saveComment(articleId, userText, null, { debate: true, optimist, skeptic });
+      cs.innerHTML = buildThreadHTML(article, getComment(articleId));
+    } else {
+      const aiText = await getAIResponse(article, userText);
+      saveComment(articleId, userText, aiText);
+      cs.innerHTML = buildThreadHTML(article, getComment(articleId));
+    }
+  } catch (e) {
+    cs.innerHTML = buildInputHTML(articleId);
+    const newTa = document.getElementById(`ta-${articleId}`);
+    if (newTa) { newTa.value = userText; newTa.style.borderColor = 'var(--red)'; }
+  }
+}
+
+// FEATURE 12 trigger: show time-shifted headline on demand
+async function showTimeShift(articleId, e) {
+  e.preventDefault();
+  const btn = e.target;
+  const article = allArticles.find(a => a.id === articleId);
+  const container = document.getElementById(`timeshift-${articleId}`);
+  if (!article || !container) return;
+
+  btn.disabled = true;
+  btn.textContent = '🕰️ Time-traveling...';
+  container.innerHTML = `<div class="thinking-dots" style="margin:8px 0;"><span></span><span></span><span></span></div>`;
+
+  try {
+    const shifted = await getTimeShiftedVersion(article);
+    if (shifted) {
+      container.innerHTML = `
+        <div style="background:var(--bg-inset);border-radius:12px;padding:12px;margin:8px 0;border-left:3px solid var(--label3);">
+          <div style="font-size:10.5px;text-transform:uppercase;letter-spacing:0.06em;color:var(--label3);margin-bottom:6px;">10 Years Ago, This Might Have Read:</div>
+          <div style="font-size:14px;font-weight:700;margin-bottom:4px;">${escHtml(shifted.title)}</div>
+          <div style="font-size:13px;color:var(--label2);line-height:1.5;">${escHtml(shifted.body)}</div>
+        </div>`;
+    } else {
+      container.innerHTML = `<div style="font-size:12px;color:var(--label3);margin:6px 0;">Couldn't time-travel right now.</div>`;
+    }
+  } catch {
+    container.innerHTML = `<div style="font-size:12px;color:var(--label3);margin:6px 0;">Couldn't time-travel right now.</div>`;
+  }
+  btn.remove();
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey && e.target.classList.contains('comment-input')) {
+    e.preventDefault();
+    const id = e.target.id.replace('ta-', '');
+    submitComment(id, false);
+  }
+});
+
+// ════════════════════════════════════════════════════════════════════════════
+// SILENT CARD (Feature: no AI take, just space)
+// ════════════════════════════════════════════════════════════════════════════
+const SILENT_PROMPTS = [
+  "Before you scroll — what do you actually think happened here, before anyone tells you what to think?",
+  "No AI take this time. Just sit with the last story for a second.",
+  "This space is intentionally empty. What's your gut reaction to what you just read?",
+  "Pause. What would you have predicted about this a year ago?"
+];
+
+function renderSilentCard() {
+  const card = document.createElement('div');
+  card.className = 'card silent-card';
+  const prompt = SILENT_PROMPTS[Math.floor(Math.random() * SILENT_PROMPTS.length)];
+  card.innerHTML = `<div class="silent-icon">◌</div><div class="silent-text">${prompt}</div>`;
+  return card;
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// COMPRESSION MODE (60-second mode)
+// ════════════════════════════════════════════════════════════════════════════
+let compressionOpen = false;
+
+async function toggleCompression() {
+  const panel = document.getElementById('compression-panel');
+  compressionOpen = !compressionOpen;
+
+  if (!compressionOpen) { panel.classList.remove('visible'); return; }
+
+  panel.classList.add('visible');
+  panel.innerHTML = `<h3>⚡ Synthesizing</h3><div class="thinking-dots"><span></span><span></span><span></span></div>`;
+
+  const visible = allArticles.filter(a => !a.isCounter).slice(0, displayedCount || 6);
+  if (visible.length === 0) {
+    panel.innerHTML = `<h3>⚡ 60-Second Mode</h3><p>Load some stories first, then come back here.</p>`;
+    return;
+  }
+
+  try {
+    const summary = await getCompressionSummary(visible);
+    panel.innerHTML = `<h3>⚡ If you only have 60 seconds</h3><p>${summary}</p>`;
+  } catch {
+    panel.innerHTML = `<h3>⚡ 60-Second Mode</h3><p>Couldn't generate a summary right now. Try again in a moment.</p>`;
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// FEED ASSEMBLY — interleaves counter-cards and silent cards
+// ════════════════════════════════════════════════════════════════════════════
 function filteredArticles() {
-  if (activeFilter === 'all') return allArticles;
-  return allArticles.filter(a => a.topic === activeFilter);
+  if (activeFilter === 'all') return allArticles.filter(a => !a.isCounter);
+  return allArticles.filter(a => a.topic === activeFilter && !a.isCounter);
 }
 
-function displayNextPage() {
+async function displayNextPage() {
   const articles = filteredArticles();
   const slice = articles.slice(displayedCount, displayedCount + PAGE_SIZE);
   const feed = document.getElementById('feed');
-  slice.forEach((art, i) => feed.appendChild(renderCard(art, i)));
+
+  for (let i = 0; i < slice.length; i++) {
+    const article = slice[i];
+    cardCounter++;
+
+    const card = renderCard(article, i);
+    feed.appendChild(card);
+    startPaceTracking(card, article.id);
+
+    // Trigger ambient sound for first visible card of batch
+    if (i === 0) playAmbientForTopic(article.topic);
+
+    // FEATURE: Silent card every 7th position
+    if (cardCounter % 7 === 0) {
+      feed.appendChild(renderSilentCard());
+    }
+
+    // FEATURE: Counter-card every 5th position (async, non-blocking)
+    if (cardCounter % 5 === 0) {
+      generateCounterCard(article).then(counter => {
+        if (counter) {
+          allArticles.push(counter);
+          const counterCard = renderCard(counter, 0);
+          feed.appendChild(counterCard);
+        }
+      }).catch(() => {});
+    }
+  }
+
   displayedCount += slice.length;
 }
 
-function loadMore() {
+// ════════════════════════════════════════════════════════════════════════════
+// SKELETONS / STATES
+// ════════════════════════════════════════════════════════════════════════════
+function showSkeletons(n = 3) {
+  const feed = document.getElementById('feed');
+  for (let i = 0; i < n; i++) {
+    const sk = document.createElement('div');
+    sk.className = 'skeleton-card';
+    sk.innerHTML = `<div class="skel skel-tag"></div><div class="skel skel-title"></div><div class="skel skel-title2"></div><div class="skel skel-body"></div><div class="skel skel-body2"></div><div class="skel skel-body3"></div>`;
+    feed.appendChild(sk);
+  }
+}
+function clearSkeletons() { document.querySelectorAll('.skeleton-card').forEach(el => el.remove()); }
+
+// ════════════════════════════════════════════════════════════════════════════
+// LOAD / REFRESH / FILTER / INFINITE SCROLL
+// ════════════════════════════════════════════════════════════════════════════
+async function loadMore() {
   if (isLoading) return;
   isLoading = true;
   document.getElementById('load-spinner').classList.add('visible');
-  setTimeout(() => {
-    displayNextPage();
-    document.getElementById('load-spinner').classList.remove('visible');
-    isLoading = false;
-  }, 500);
+
+  try {
+    const topics = activeFilter === 'all'
+      ? ['Tech','Science','World','Business','Health','Space','Climate']
+      : [activeFilter];
+    const existingIds = allArticles.map(a => a.id);
+    const newArticles = await fetchNews(topics, existingIds);
+    allArticles.push(...newArticles);
+    await displayNextPage();
+  } catch (err) {
+    console.error('Load more failed:', err);
+    if (displayedCount === 0) {
+      document.getElementById('feed').innerHTML = `
+        <div class="state-card">
+          <div class="state-icon">📡</div>
+          <div class="state-title">Couldn't load news</div>
+          <div class="state-body">Check your connection and try again.</div>
+          <button class="state-btn" onclick="refreshFeed()">Try again</button>
+        </div>`;
+    }
+  }
+
+  document.getElementById('load-spinner').classList.remove('visible');
+  isLoading = false;
 }
 
-function initialLoad() {
-  allArticles = generateLocalMockFeed();
-  displayNextPage();
+async function initialLoad() {
+  const feed = document.getElementById('feed');
+  feed.innerHTML = '';
+  displayedCount = 0;
+  cardCounter = 0;
+  showSkeletons(4);
+
+  try {
+    const topics = ['Tech','Science','World','Business','Health','Space','Climate'];
+    allArticles = await fetchNews(topics, []);
+  } catch (err) {
+    clearSkeletons();
+    feed.innerHTML = `
+      <div class="state-card">
+        <div class="state-icon">📡</div>
+        <div class="state-title">Couldn't fetch today's news</div>
+        <div class="state-body">Check your connection and try again.</div>
+        <button class="state-btn" onclick="refreshFeed()">Try again</button>
+      </div>`;
+    isLoading = false;
+    return;
+  }
+
+  clearSkeletons();
+  await displayNextPage();
+  renderBiasMirrorBanner();
+  isLoading = false;
 }
 
 function refreshFeed() {
   document.getElementById('refresh-btn').classList.add('spinning');
-  document.getElementById('feed').innerHTML = '';
-  displayedCount = 0;
-  setTimeout(() => {
-    initialLoad();
-    document.getElementById('refresh-btn').classList.remove('spinning');
-  }, 600);
+  initialLoad().then(() => document.getElementById('refresh-btn').classList.remove('spinning'));
 }
 
 document.getElementById('chips').addEventListener('click', e => {
@@ -422,18 +1506,31 @@ document.getElementById('chips').addEventListener('click', e => {
   chip.classList.add('active');
   activeFilter = chip.dataset.topic;
   displayedCount = 0;
+  cardCounter = 0;
   document.getElementById('feed').innerHTML = '';
-  displayNextPage();
+
+  const visible = filteredArticles();
+  if (visible.length > 0) displayNextPage();
+  else loadMore();
 });
 
 const observer = new IntersectionObserver(entries => {
-  if (entries[0].isIntersecting && !isLoading && displayedCount < filteredArticles().length) {
-    loadMore();
+  if (entries[0].isIntersecting && !isLoading) {
+    const visible = filteredArticles();
+    if (displayedCount < visible.length) displayNextPage();
+    else loadMore();
   }
-}, { rootMargin: '150px' });
+}, { rootMargin: '200px' });
 observer.observe(document.getElementById('load-trigger'));
 
+// ════════════════════════════════════════════════════════════════════════════
+// BOOT
+// ════════════════════════════════════════════════════════════════════════════
+initTheme();
+renderDnaBadge();
 initialLoad();
+
 </script>
 </body>
 </html>
+
