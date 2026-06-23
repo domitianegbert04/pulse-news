@@ -8,7 +8,19 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400&display=swap" rel="stylesheet">
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+<style>
+    /* Add this near the top of your style block */
+    body { font-family: 'Inter', -apple-system, sans-serif; }
+    
+    /* Critical LCP fix */
+    .compression-toggle {
+      display: flex;
+      visibility: visible;
+      min-height: 44px;
+    }
+  </style>
+</head>
+  
 :root {
   --bg: #F2F2F7;
   --surface: #FFFFFF;
